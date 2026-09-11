@@ -18,19 +18,12 @@ import Modal from '@/components/ui/Modal';
 import EmptyState from '@/components/ui/EmptyState';
 import { ListSkeleton } from '@/components/ui/Skeleton';
 import { useToast } from '@/components/ui/Toast';
-import {
-  useAppointments,
-  useCancelAppointment,
-  useCreateAppointment,
-} from '@/hooks/useAppointments';
+import { useConsultations, useCreateConsultation } from '@/hooks/useConsultations';
 import { useDoctorSlots } from '@/hooks/useAvailability';
 import { usePublicDoctors } from '@/hooks/useUsers';
 import { useFormat } from '@/hooks/useFormat';
 import { apiError } from '@/lib/api';
-import type { Appointment, Patient } from '@/types';
-
-/** Backend values; `enums.appointmentType` supplies the label. */
-const TYPES = ['FOLLOW_UP_CHAT', 'HOME_VISIT', 'REVIEW'] as const;
+import type { Patient } from '@/types';
 
 /**
  * `<input type="date">` wants YYYY-MM-DD, and so does the slots endpoint.
@@ -48,10 +41,9 @@ export default function ChwSchedulePage() {
   const { toast } = useToast();
   const [tab, setTab] = useState<'upcoming' | 'past'>('upcoming');
   const [search, setSearch] = useState('');
-  const { data: appointments, isLoading } = useAppointments(tab);
+  const { data: consultations, isLoading } = useConsultations();
   const t = useTranslations('chw.schedule');
   const tc = useTranslations('common');
-  const tt = useTranslations('enums.appointmentType');
   const tsp = useTranslations('enums.specialization');
   const f = useFormat();
 
@@ -60,29 +52,34 @@ export default function ChwSchedulePage() {
   const [doctorId, setDoctorId] = useState('');
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
-  const [type, setType] = useState<string>(TYPES[0]);
-
-  const [cancelling, setCancelling] = useState<Appointment | null>(null);
   const [reason, setReason] = useState('');
 
   const { data: doctors } = usePublicDoctors();
+  // `doctorId` state holds the Users.id (what booking needs). The slots
+  // endpoint keys off the Doctors profile id instead, same as the public
+  // doctor-profile route - so look the selected doctor back up for that one.
+  const selectedDoctor = doctors?.find((d) => String(d.id) === doctorId);
   // the doctor's real free times for that date, already minus what is booked
-  const { data: day, isFetching: slotsLoading } = useDoctorSlots(doctorId, date);
+  const { data: day, isFetching: slotsLoading } = useDoctorSlots(selectedDoctor?.doctorId, date);
 
-  const create = useCreateAppointment();
-  const cancel = useCancelAppointment();
+  const create = useCreateConsultation();
 
   const today = isoDate(new Date());
   const freeSlots = day?.slots ?? [];
   const noSlots = Boolean(doctorId && date && !slotsLoading && !freeSlots.length);
 
-  const visible = (appointments ?? []).filter((a) => {
+  // ConsultationsController has no upcoming/past filter param - split client-side.
+  const now = Date.now();
+  const byTab = (consultations ?? []).filter((c) =>
+    tab === 'upcoming' ? new Date(c.scheduledAt).getTime() >= now : new Date(c.scheduledAt).getTime() < now,
+  );
+  const visible = byTab.filter((c) => {
     const q = search.trim().toLowerCase();
     if (!q) return true;
     return (
-      a.patient?.fullName?.toLowerCase().includes(q) ||
-      a.patient?.mrn?.toLowerCase().includes(q) ||
-      a.doctor?.fullName?.toLowerCase().includes(q)
+      c.patient?.fullName?.toLowerCase().includes(q) ||
+      c.patient?.mrn?.toLowerCase().includes(q) ||
+      c.doctor?.fullName?.toLowerCase().includes(q)
     );
   });
 
@@ -91,13 +88,14 @@ export default function ChwSchedulePage() {
     setDoctorId('');
     setDate('');
     setTime('');
-    setType(TYPES[0]);
+    setReason('');
   };
 
   const submit = () => {
     if (!patient) return toast(t('pickPatient'), 'error');
     if (!doctorId) return toast(t('pickDoctor'), 'error');
     if (!date || !time) return toast(t('pickDateTime'), 'error');
+    if (reason.trim().length < 4) return toast(t('reasonRequired'), 'error');
 
     // local wall-clock in, UTC instant out - the API stores a timestamptz
     const scheduledAt = new Date(`${date}T${time}:00`);
@@ -108,7 +106,7 @@ export default function ChwSchedulePage() {
         patientId: patient.id,
         doctorId: Number(doctorId),
         scheduledAt: scheduledAt.toISOString(),
-        type,
+        reason: reason.trim(),
       },
       {
         onSuccess: () => {
@@ -117,22 +115,6 @@ export default function ChwSchedulePage() {
           resetForm();
         },
         onError: (e) => toast(apiError(e, t('bookFailed')), 'error'),
-      },
-    );
-  };
-
-  const submitCancel = () => {
-    if (!cancelling) return;
-    if (reason.trim().length < 4) return toast(t('reasonRequired'), 'error');
-    cancel.mutate(
-      { id: cancelling.id, cancelReason: reason.trim() },
-      {
-        onSuccess: () => {
-          toast(t('cancelled'));
-          setCancelling(null);
-          setReason('');
-        },
-        onError: (e) => toast(apiError(e, t('cancelFailed')), 'error'),
       },
     );
   };
@@ -188,11 +170,11 @@ export default function ChwSchedulePage() {
         </Card>
       ) : (
         <div className="space-y-3">
-          {visible.map((a) => {
-            const cancelled = a.status === 'CANCELLED';
-            const tile = f.tile(a.scheduledAt);
+          {visible.map((c) => {
+            const cancelled = c.status === 'CANCELLED';
+            const tile = f.tile(c.scheduledAt);
             return (
-              <Card key={a.id}>
+              <Card key={c.id}>
                 <div className="flex flex-wrap items-center gap-4">
                   <div
                     className={
@@ -223,45 +205,26 @@ export default function ChwSchedulePage() {
 
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-semibold text-slate-900">
-                      {a.patient?.fullName}
+                      {c.patient?.fullName}
                       <span className="ml-2 font-mono text-xs font-normal text-slate-400">
-                        {f.digits(a.patient?.mrn)}
+                        {f.digits(c.patient?.mrn)}
                       </span>
                     </p>
                     <p className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-500">
                       <span className="inline-flex items-center gap-1">
                         <Clock className="h-3 w-3" aria-hidden />
-                        {f.dateTime(a.scheduledAt)}
+                        {f.dateTime(c.scheduledAt)}
                       </span>
                       <span className="inline-flex items-center gap-1">
                         <Stethoscope className="h-3 w-3" aria-hidden />
-                        {a.doctor?.fullName ?? t('unassigned')}
+                        {c.doctor?.fullName ?? t('unassigned')}
                       </span>
                     </p>
-                    {a.cancelReason && (
-                      <p className="mt-1 text-xs italic text-slate-400">
-                        {t('cancelledReason', { reason: a.cancelReason })}
-                      </p>
-                    )}
+                    <p className="mt-1 truncate text-xs text-slate-500">{c.reason}</p>
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <Badge tone="purple">
-                      {a.type && tt.has(a.type) ? tt(a.type) : a.type?.replace(/_/g, ' ')}
-                    </Badge>
-                    <StatusBadge status={a.status} />
-                    {tab === 'upcoming' && !cancelled && (
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => {
-                          setCancelling(a);
-                          setReason('');
-                        }}
-                      >
-                        {tc('cancel')}
-                      </Button>
-                    )}
+                    <StatusBadge status={c.status} />
                   </div>
                 </div>
               </Card>
@@ -316,26 +279,17 @@ export default function ChwSchedulePage() {
             ))}
           </Select>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Input
-              label={tc('date')}
-              type="date"
-              required
-              min={today}
-              value={date}
-              onChange={(e) => {
-                setDate(e.target.value);
-                setTime('');
-              }}
-            />
-            <Select label={tc('type')} value={type} onChange={(e) => setType(e.target.value)}>
-              {TYPES.map((v) => (
-                <option key={v} value={v}>
-                  {tt(v)}
-                </option>
-              ))}
-            </Select>
-          </div>
+          <Input
+            label={tc('date')}
+            type="date"
+            required
+            min={today}
+            value={date}
+            onChange={(e) => {
+              setDate(e.target.value);
+              setTime('');
+            }}
+          />
 
           {doctorId && date && (
             <div>
@@ -384,44 +338,16 @@ export default function ChwSchedulePage() {
             </div>
           )}
 
-          <p className="text-xs text-slate-400">{t('bookFootnote')}</p>
-        </div>
-      </Modal>
-
-      <Modal
-        open={cancelling !== null}
-        onClose={() => setCancelling(null)}
-        title={t('cancelTitle')}
-        footer={
-          <>
-            <Button variant="ghost" onClick={() => setCancelling(null)}>
-              {t('keepIt')}
-            </Button>
-            <Button variant="danger" onClick={submitCancel} loading={cancel.isPending}>
-              {t('cancelTitle')}
-            </Button>
-          </>
-        }
-      >
-        <div className="space-y-4">
-          <p className="text-sm text-slate-600">
-            {t('cancelSummary', {
-              patient: cancelling?.patient?.fullName ?? tc('unknownPatient'),
-              doctor: cancelling?.doctor?.fullName ?? t('unassigned'),
-              when: f.dateTime(cancelling?.scheduledAt),
-            })}
-          </p>
           <Textarea
-            label={tc('reason')}
+            label={t('reasonLabel')}
             required
             rows={3}
-            placeholder={t('cancelReasonPlaceholder')}
+            placeholder={t('reasonPlaceholder')}
             value={reason}
             onChange={(e) => setReason(e.target.value)}
           />
-          <Alert tone="warning" className="rounded-lg">
-            {t('cancelNote')}
-          </Alert>
+
+          <p className="text-xs text-slate-400">{t('bookFootnote')}</p>
         </div>
       </Modal>
     </>

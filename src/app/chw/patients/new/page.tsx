@@ -1,21 +1,24 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Check, Copy } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import PageHeader from '@/components/shared/PageHeader';
 import Card from '@/components/ui/Card';
 import Input from '@/components/ui/Input';
 import Select from '@/components/ui/Select';
 import Button from '@/components/ui/Button';
+import Modal from '@/components/ui/Modal';
+import Alert from '@/components/ui/Alert';
 import { useToast } from '@/components/ui/Toast';
 import { useCreatePatient } from '@/hooks/usePatients';
 import { useFormat } from '@/hooks/useFormat';
 import { apiError } from '@/lib/api';
+import type { CreatePatientResult } from '@/types';
 
 type FormValues = {
   fullName: string;
@@ -42,6 +45,47 @@ const GENDERS = ['MALE', 'FEMALE', 'OTHER'] as const;
 
 const RELATIONS = ['SPOUSE', 'PARENT', 'SIBLING', 'CHILD', 'OTHER'] as const;
 
+/** One row of the credentials modal, with its own copy-to-clipboard state. */
+function CredentialRow({ label, value }: { label: string; value: string }) {
+  const t = useTranslations('chw.patientNew');
+  const [copied, setCopied] = useState(false);
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(value);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      // clipboard API can be unavailable (older WebViews) - the value is
+      // still selectable/readable on screen, so this is a silent no-op
+    }
+  };
+
+  return (
+    <div>
+      <p className="text-xs font-medium text-slate-500">{label}</p>
+      <div className="mt-1 flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2">
+        <span className="flex-1 select-all font-mono text-sm text-slate-900">{value}</span>
+        <button
+          type="button"
+          onClick={copy}
+          className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-slate-500 transition-colors hover:bg-slate-200 hover:text-slate-800"
+        >
+          {copied ? (
+            <>
+              <Check className="h-3.5 w-3.5" aria-hidden /> {t('copied')}
+            </>
+          ) : (
+            <>
+              <Copy className="h-3.5 w-3.5" aria-hidden /> {t('copy')}
+            </>
+          )}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function RegisterPatientPage() {
   const router = useRouter();
   const { toast } = useToast();
@@ -52,6 +96,11 @@ export default function RegisterPatientPage() {
   const tg = useTranslations('enums.gender');
   const trel = useTranslations('enums.relation');
   const f = useFormat();
+
+  // Held until the CHW confirms they've read the credentials out - only
+  // then do we navigate away, since this is the one and only time the
+  // temporary password is ever shown.
+  const [result, setResult] = useState<CreatePatientResult | null>(null);
 
   const schema = useMemo(
     () =>
@@ -85,12 +134,20 @@ export default function RegisterPatientPage() {
 
   const onSubmit = (values: FormValues) =>
     createPatient.mutate(values, {
-      onSuccess: (patient) => {
-        toast(t('registered', { mrn: f.digits(patient.mrn) }));
-        router.push('/chw/patients');
+      onSuccess: (created) => {
+        toast(t('registered', { mrn: f.digits(created.patient.mrn) }));
+        // Stay on this page behind the credentials modal instead of
+        // navigating immediately - the temp password is unrecoverable
+        // once the CHW clicks away, so they need to actually record it.
+        setResult(created);
       },
       onError: (e) => toast(apiError(e, t('failed')), 'error'),
     });
+
+  const closeAndLeave = () => {
+    setResult(null);
+    router.push('/chw/patients');
+  };
 
   return (
     <div className="mx-auto max-w-3xl">
@@ -175,6 +232,29 @@ export default function RegisterPatientPage() {
           </div>
         </form>
       </Card>
+
+      <Modal
+        open={Boolean(result)}
+        onClose={closeAndLeave}
+        title={t('credentialsTitle')}
+        footer={
+          <Button onClick={closeAndLeave}>{t('credentialsDone')}</Button>
+        }
+      >
+        {result && (
+          <div className="space-y-4">
+            <Alert tone="warning" className="rounded-xl">
+              {t('credentialsWarning')}
+            </Alert>
+            <CredentialRow label={t('credentialsMrn')} value={f.digits(result.patient.mrn)} />
+            <CredentialRow label={t('credentialsEmail')} value={result.credentials.email} />
+            <CredentialRow
+              label={t('credentialsPassword')}
+              value={result.credentials.tempPassword}
+            />
+          </div>
+        )}
+      </Modal>
     </div>
   );
 }

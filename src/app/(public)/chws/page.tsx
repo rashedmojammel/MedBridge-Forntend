@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 import { Users } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import SearchBar from '@/components/shared/SearchBar';
-import Avatar from '@/components/ui/Avatar';
 import Badge from '@/components/ui/Badge';
 import Card from '@/components/ui/Card';
 import EmptyState from '@/components/ui/EmptyState';
@@ -56,33 +55,42 @@ export default function ChwDirectoryPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: i * 0.04 }}
               >
-                <Card className="h-full">
-                  <div className="flex items-center gap-3">
-                    <Avatar
-                      name={c.fullName}
+                <div className="group relative flex aspect-[3/4] w-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-slate-100 transition-all hover:border-blue-300 hover:shadow-lg">
+                  {/* Full-bleed photo, falls back to an icon tile when no image */}
+                  {c.profileImage ? (
+                    <img
                       src={c.profileImage}
-                      size="lg"
-                      tone="green"
+                      alt={c.fullName}
+                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
-                    <div className="min-w-0">
-                      <p className="truncate font-semibold text-slate-900">{c.fullName}</p>
-                      <Badge tone="purple" className="mt-1">
-                        {tr('CHW')}
-                      </Badge>
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-emerald-400 to-emerald-600">
+                      <Users className="h-20 w-20 text-white/90" strokeWidth={1.5} aria-hidden />
+                    </div>
+                  )}
+
+                  {/* Scrim so text stays legible over any photo */}
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+
+                  <Badge tone="purple" className="relative z-10 m-3 self-start shadow-sm">
+                    {tr('CHW')}
+                  </Badge>
+
+                  <div className="relative z-10 mt-auto flex flex-col p-5 text-white">
+                    <p className="truncate text-lg font-semibold">{c.fullName}</p>
+                    <p className="mt-1 text-xs text-white/80">
+                      {t('assignedArea')}{' '}
+                      <span className="font-medium">{c.assignedArea}</span>
+                    </p>
+                    <div className="mt-3 flex flex-wrap gap-1.5">
+                      {SKILLS.map((s) => (
+                        <Badge key={s} tone="gray" className="bg-white/15 text-white">
+                          {t(`skills.${s}`)}
+                        </Badge>
+                      ))}
                     </div>
                   </div>
-                  <p className="mt-3 text-sm text-slate-600">
-                    {t('assignedArea')}{' '}
-                    <span className="font-medium">{c.assignedArea}</span>
-                  </p>
-                  <div className="mt-3 flex flex-wrap gap-1.5">
-                    {SKILLS.map((s) => (
-                      <Badge key={s} tone="gray">
-                        {t(`skills.${s}`)}
-                      </Badge>
-                    ))}
-                  </div>
-                </Card>
+                </div>
               </motion.div>
             ))}
           </div>

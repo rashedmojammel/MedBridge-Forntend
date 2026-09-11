@@ -98,6 +98,15 @@ export interface Patient {
   createdAt?: string;
 }
 
+export interface PatientCredentials {
+  email: string;
+  tempPassword: string;
+}
+
+export interface CreatePatientResult {
+  patient: Patient;
+  credentials: PatientCredentials;
+}
 export interface VitalSigns {
   id: number;
   patient?: Patient;

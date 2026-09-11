@@ -690,7 +690,16 @@
       "vPhone": "Phone number is required",
       "vAddress": "Address is required",
       "vEcName": "Emergency contact name is required",
-      "vEcPhone": "Emergency contact phone is required"
+      "vEcPhone": "Emergency contact phone is required",
+      "credentialsTitle": "Patient login created",
+"credentialsWarning": "Read this out to the patient now. It will not be shown again — if it's lost, an admin will need to reset the password.",
+"credentialsMrn": "MRN",
+"credentialsEmail": "Login email",
+"credentialsPassword": "Temporary password",
+"copy": "Copy",
+"copied": "Copied",
+"copyAll": "Copy all",
+"credentialsDone": "I've shared this with the patient"
     },
     "triageIndex": {
       "title": "Triage",
@@ -835,6 +844,8 @@
     "respShort": "Resp",
     "sugarShort": "Sugar"
   },
+  
+
   "chat": {
     "noMessages": "No messages yet. Say hello to start the consultation.",
     "you": "You",

@@ -2,7 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import api, { unwrap } from '@/lib/api';
-import type { Patient } from '@/types';
+import type { CreatePatientResult, Patient } from '@/types';
 
 export function usePatients(search?: string) {
   return useQuery({
@@ -20,11 +20,17 @@ export function usePatient(id?: number | string) {
   });
 }
 
+/**
+ * The backend now creates a login account alongside the patient record, so
+ * the response is `{ patient, credentials }` rather than a bare Patient -
+ * see PatientsService.create(). `credentials` is only ever present in this
+ * one response; there is nowhere else in the app it can be fetched from.
+ */
 export function useCreatePatient() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (payload: Record<string, any>) =>
-      unwrap<Patient>(await api.post('/patients', payload)),
+      unwrap<CreatePatientResult>(await api.post('/patients', payload)),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['patients'] }),
   });
 }
