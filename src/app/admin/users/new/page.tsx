@@ -53,8 +53,6 @@ export default function AddUserPage() {
   });
 
   const onSubmit = (values: any) => {
-    // strip role-specific fields that do not belong to the chosen role,
-    // because the backend runs forbidNonWhitelisted on its DTO
     const base = {
       fullName: values.fullName,
       email: values.email,

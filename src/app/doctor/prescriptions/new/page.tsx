@@ -44,7 +44,6 @@ function NewPrescriptionForm() {
   const { toast } = useToast();
   const params = useSearchParams();
 
-  // both are optional - a prescription can hang off a consultation or stand alone
   const patientIdParam = params.get('patientId');
   const consultationIdParam = params.get('consultationId');
 
@@ -104,21 +103,18 @@ function NewPrescriptionForm() {
     });
   };
 
-  // ?templateId comes from the templates screen - apply it once, on arrival
   const appliedFromUrl = useRef(false);
   const templateIdParam = params.get('templateId');
   useEffect(() => {
     if (!templateIdParam || appliedFromUrl.current) return;
     appliedFromUrl.current = true;
     pickTemplate(Number(templateIdParam));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
   }, [templateIdParam]);
 
   const submit = () => {
     if (!patient) return toast('Choose a patient', 'error');
     if (!items.length) return toast('Add at least one medicine', 'error');
-
-    // build the payload field by field - the API rejects unknown properties
     create.mutate(
       {
         patientId: patient.id,
