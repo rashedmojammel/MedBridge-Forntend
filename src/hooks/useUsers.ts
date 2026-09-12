@@ -80,11 +80,7 @@ export function useUpdateUser() {
   });
 }
 
-/**
- * There is no DELETE /users/:id and there should not be - clinical records
- * reference their author forever. Deactivating revokes login while keeping the
- * audit trail and every consultation, prescription, and triage row intact.
- */
+
 export function useSetUserActive() {
   const qc = useQueryClient();
   return useMutation({
