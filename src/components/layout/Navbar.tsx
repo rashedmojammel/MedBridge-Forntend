@@ -14,6 +14,7 @@ import { useCurrentUser, useLogout } from '@/hooks/useAuth';
 import { useFormat } from '@/hooks/useFormat';
 import { dashboardFor } from '@/lib/auth';
 import { ROLES_WITH_BANGLA } from '@/i18n/config';
+import Image from 'next/image';
 
 export default function Navbar() {
   const user = useCurrentUser();
