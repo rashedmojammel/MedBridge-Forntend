@@ -64,12 +64,6 @@ export default function ForgotPasswordPage() {
 
       {sent ? (
         <>
-          {/*
-            The backend deliberately answers the same way whether or not the
-            email exists, so we show its message rather than confirming that an
-            account was found. It arrives in English from the API - translating
-            it here would mean guessing at its wording.
-          */}
           <Alert tone="success" className="rounded-lg">
             {sent}
           </Alert>
