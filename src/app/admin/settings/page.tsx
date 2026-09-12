@@ -24,11 +24,6 @@ import { useSettings, useUpdateSettings } from '@/hooks/useSettings';
 import { apiError } from '@/lib/api';
 import type { SystemSetting } from '@/types';
 
-/**
- * The knobs behind the clinical rules. Triage thresholds in particular decide
- * which vitals are flagged CRITICAL, so this page is deliberately blunt about
- * what a change does rather than presenting them as harmless preferences.
- */
 
 const CATEGORIES: {
   key: string;
@@ -67,16 +62,12 @@ const CATEGORIES: {
     tone: 'gray',
   },
 ];
-
-/** Long-form values get a textarea; the rest are single-line. */
 const MULTILINE = new Set(['platform.announcement']);
 
-/** Anything not in here is typed freely. */
 const NUMERIC_PREFIXES = ['triage.', 'inventory.', 'scheduling.'];
 
 const isNumeric = (key: string) => NUMERIC_PREFIXES.some((p) => key.startsWith(p));
 
-/** `triage.spo2.critical` reads better as "Spo2 critical". */
 function humanKey(key: string): string {
   const tail = key.split('.').slice(1).join(' ');
   return tail.charAt(0).toUpperCase() + tail.slice(1).replace(/([A-Z])/g, ' $1').toLowerCase();
@@ -89,7 +80,6 @@ export default function AdminSettingsPage() {
 
   const [draft, setDraft] = useState<Record<string, string>>({});
 
-  // the server copy wins until an admin actually types something
   useEffect(() => {
     if (!settings) return;
     setDraft((prev) => {
@@ -109,7 +99,6 @@ export default function AdminSettingsPage() {
     for (const s of settings ?? []) {
       map.set(s.category, [...(map.get(s.category) ?? []), s]);
     }
-    // known categories first, in the order above, then anything new the backend adds
     const known = CATEGORIES.map((c) => c.key);
     const extras = [...map.keys()].filter((k) => !known.includes(k)).sort();
     return [...known, ...extras]

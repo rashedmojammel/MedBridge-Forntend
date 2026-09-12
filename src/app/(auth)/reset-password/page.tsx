@@ -20,7 +20,6 @@ type FormValues = { newPassword: string; confirm: string };
 const CARD = 'w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-8 shadow-sm';
 
 function ResetPasswordForm() {
-  // the backend emails a link of the form /reset-password?token=<raw token>
   const token = useSearchParams().get('token') ?? '';
   const reset = useResetPassword();
   const [showPwd, setShowPwd] = useState(false);
