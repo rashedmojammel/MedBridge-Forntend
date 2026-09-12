@@ -9,8 +9,6 @@ import { useTranslations } from 'next-intl';
 import LanguageToggle from '@/components/LanguageToggle';
 import { cn } from '@/lib/utils';
 
-// `key` indexes the publicNav namespace; the label itself is resolved at render
-// so a language switch re-labels the nav without a reload.
 const LINKS = [
   { href: '/', key: 'home' },
   { href: '/doctors', key: 'doctors' },

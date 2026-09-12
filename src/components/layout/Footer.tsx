@@ -4,9 +4,6 @@ import { useTranslations, useLocale } from 'next-intl';
 import { localizeDigits } from '@/lib/utils';
 import type { Locale } from '@/i18n/config';
 
-// Hardcoded rather than `new Date().getFullYear()` - this is a server component
-// (no "use client"), so that value is computed once at server-render time and
-// again at client hydration, producing a mismatch across the New Year boundary.
 const COPYRIGHT_YEAR = 2026;
 
 export default function Footer() {
@@ -67,8 +64,7 @@ export default function Footer() {
 
       <div className="border-t border-slate-200">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-slate-400 sm:flex-row">
-          {/* The year is passed as a pre-formatted string so ICU inserts it
-              verbatim - a numeric argument would come out as "2,026". */}
+          {}
           <p>{t('copyright', { year: localizeDigits(COPYRIGHT_YEAR, locale) })}</p>
           <div className="flex gap-4">
             <Link href="#" className="hover:text-slate-600">{t('privacy')}</Link>
