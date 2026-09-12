@@ -11,12 +11,6 @@ import { useMedicineSearch } from '@/hooks/useMedicines';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useFormat } from '@/hooks/useFormat';
 import type { Medicine } from '@/types';
-
-/**
- * Type-to-search medicine picker. The catalogue has no list-all endpoint by
- * design (it is far too large), so searching is the only way in - the empty
- * state says so rather than looking broken.
- */
 export default function MedicinePicker({
   onSelect,
   selected,

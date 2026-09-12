@@ -18,13 +18,6 @@ import { DOSAGE_FORMS } from '@/components/shared/MedicineCatalogue';
 import { apiError } from '@/lib/api';
 import type { Medicine } from '@/types';
 
-/**
- * Shared by the admin and pharmacist "add medicine" routes - both roles are
- * allowed to POST /medicines, and the form is identical.
- *
- * `threshold` is only settable here: the update route ignores it, so the low
- * stock trigger point is fixed at creation.
- */
 export default function MedicineForm({ backHref }: { backHref: string }) {
   const router = useRouter();
   const { toast } = useToast();
@@ -56,7 +49,6 @@ export default function MedicineForm({ backHref }: { backHref: string }) {
       return toast(t('vRequired'), 'error');
     }
 
-    // composed field by field - the API rejects unknown properties outright
     create.mutate(
       {
         brandName: form.brandName.trim(),
