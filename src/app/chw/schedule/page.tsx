@@ -25,12 +25,7 @@ import { useFormat } from '@/hooks/useFormat';
 import { apiError } from '@/lib/api';
 import type { Patient } from '@/types';
 
-/**
- * `<input type="date">` wants YYYY-MM-DD, and so does the slots endpoint.
- *
- * Deliberately hand-built from the local date parts rather than through `Intl`:
- * this is a key the API parses, so it stays ASCII whatever the display locale.
- */
+
 function isoDate(d: Date): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(
     d.getDate(),
@@ -55,11 +50,8 @@ export default function ChwSchedulePage() {
   const [reason, setReason] = useState('');
 
   const { data: doctors } = usePublicDoctors();
-  // `doctorId` state holds the Users.id (what booking needs). The slots
-  // endpoint keys off the Doctors profile id instead, same as the public
-  // doctor-profile route - so look the selected doctor back up for that one.
+ 
   const selectedDoctor = doctors?.find((d) => String(d.id) === doctorId);
-  // the doctor's real free times for that date, already minus what is booked
   const { data: day, isFetching: slotsLoading } = useDoctorSlots(selectedDoctor?.doctorId, date);
 
   const create = useCreateConsultation();
@@ -68,7 +60,6 @@ export default function ChwSchedulePage() {
   const freeSlots = day?.slots ?? [];
   const noSlots = Boolean(doctorId && date && !slotsLoading && !freeSlots.length);
 
-  // ConsultationsController has no upcoming/past filter param - split client-side.
   const now = Date.now();
   const byTab = (consultations ?? []).filter((c) =>
     tab === 'upcoming' ? new Date(c.scheduledAt).getTime() >= now : new Date(c.scheduledAt).getTime() < now,
@@ -97,7 +88,6 @@ export default function ChwSchedulePage() {
     if (!date || !time) return toast(t('pickDateTime'), 'error');
     if (reason.trim().length < 4) return toast(t('reasonRequired'), 'error');
 
-    // local wall-clock in, UTC instant out - the API stores a timestamptz
     const scheduledAt = new Date(`${date}T${time}:00`);
     if (Number.isNaN(scheduledAt.getTime())) return toast(t('invalidTime'), 'error');
 
@@ -309,18 +299,14 @@ export default function ChwSchedulePage() {
                           : 'rounded-lg border border-slate-200 py-2 text-xs font-medium text-slate-600 transition-colors hover:border-slate-300'
                       }
                     >
-                      {/* the label localises; `s` itself stays the value we post */}
+                      
                       {f.digits(s)}
                     </button>
                   ))}
                 </div>
               ) : null}
 
-              {/*
-                A doctor who has never filled in a weekly pattern has no slots to
-                offer, which must not stop a CHW booking - so fall back to a plain
-                time field and say why.
-              */}
+              
               {noSlots && (
                 <>
                   <Alert tone="warning" className="mb-3 rounded-lg">

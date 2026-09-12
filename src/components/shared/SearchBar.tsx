@@ -15,7 +15,7 @@ export default function SearchBar({
   placeholder?: string;
   className?: string;
 }) {
-  //
+  
   const t = useTranslations('common');
   return (
     <div
