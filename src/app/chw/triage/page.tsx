@@ -17,10 +17,6 @@ import { useDebounce } from '@/hooks/useDebounce';
 import { useFormat } from '@/hooks/useFormat';
 import { ageFrom } from '@/lib/utils';
 
-/**
- * Triage always starts from a patient, so this is the picker that leads into
- * /chw/triage/[patientId] where the vitals and symptoms actually get recorded.
- */
 export default function TriageIndexPage() {
   const router = useRouter();
   const [search, setSearch] = useState('');
