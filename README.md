@@ -1,72 +1,166 @@
-# Medbridge Frontend
+# MedBridge
 
-Next.js 15 App Router frontend for the Medbridge rural healthcare consultation
-platform. Talks to the NestJS backend over REST + Socket.IO.
+**Rural Healthcare Consultation Platform (RHCP)**
 
-## Stack
+MedBridge connects patients in rural, underserved communities with doctors, community health workers (CHWs), and pharmacists through a single platform — enabling remote triage, chat-based consultations, e-prescriptions, and medicine dispensing where in-person care is hard to reach.
 
-TypeScript · Tailwind CSS · TanStack Query v5 · Axios · socket.io-client ·
-React Hook Form + Zod · framer-motion · js-cookie · lucide-react
+🔗 **Live demo:** [medbridgecare.vercel.app](https://medbridgecare.vercel.app/)
 
-## Quick start
+---
+
+## Overview
+
+In many rural areas, the nearest doctor can be hours away. MedBridge closes that gap by giving community health workers the tools to triage patients on the ground, and giving doctors a way to review vitals, chat with patients, and issue prescriptions remotely — with pharmacists and admins keeping the rest of the system running.
+
+## Features
+
+**Patient**
+- Book and join chat-based consultations with doctors
+- View prescriptions, medicines, and treatment history
+- Keep a personal health diary
+- Manage account and profile
+
+**Doctor**
+- Dashboard of upcoming and in-progress consultations
+- Set weekly availability and time off
+- Live chat consultations with CHW-recorded vitals attached
+- Issue prescriptions from reusable templates
+- Refer patients to nearby facilities
+
+**Community Health Worker (CHW)**
+- Register new patients in the field — including their portal login, generated on the spot
+- Record vitals and symptoms, with automatic triage suggestions (critical / non-critical)
+- Log field visits and follow-ups
+- Escalate referrals to doctors or facilities
+
+**Pharmacist**
+- View and dispense prescriptions
+- Track medicine inventory with low-stock alerts
+- Manage the medicine catalogue and alternatives
+
+**Admin**
+- Manage users and roles across the platform
+- View system-wide audit logs
+- Configure platform settings and triage thresholds
+- Monitor stats across districts and time periods
+
+**Platform-wide**
+- Full English / Bangla bilingual support (next-intl)
+- Real-time chat via Socket.IO
+- Role-based access control end to end
+
+## Tech Stack
+
+**Frontend** (this repo)
+| | |
+|---|---|
+| Framework | Next.js 16 (App Router) |
+| Language | TypeScript |
+| Styling | Tailwind CSS |
+| Data fetching | TanStack React Query, Axios |
+| Forms & validation | React Hook Form, Zod |
+| Realtime | Socket.IO client |
+| i18n | next-intl (English / Bangla) |
+| Animation | Framer Motion |
+| Icons | Lucide |
+
+**Backend**
+| | |
+|---|---|
+| Framework | NestJS |
+| ORM | TypeORM |
+| Database | PostgreSQL |
+| Auth | JWT (Passport) |
+| Realtime | Socket.IO |
+| API docs | Swagger |
+
+**Infrastructure**
+- Frontend deployed on **Vercel**
+- Backend + PostgreSQL deployed on **Render**
+
+## Getting Started
+
+### Prerequisites
+- Node.js 20+
+- npm
+- A running instance of the [medbridge-backend](#) API
+
+### Installation
 
 ```bash
+git clone https://github.com/rashedmojammel/MedBridge-Forntend-Demo.git
+cd MedBridge-Forntend-Demo
 npm install
-cp .env.local.example .env.local     # point NEXT_PUBLIC_API_URL at the backend
+```
+
+### Environment variables
+
+Copy the example file and point it at your backend:
+
+```bash
+cp .env.local.example .env.local
+```
+
+```dotenv
+NEXT_PUBLIC_API_URL=http://localhost:3001
+```
+
+### Run locally
+
+```bash
 npm run dev
 ```
 
-Runs on http://localhost:3000. The backend must be running on
-http://localhost:3001 with `npm run seed` already executed.
+Visit [http://localhost:3000](http://localhost:3000).
 
-## Seeded logins (all password: `password123`)
+### Build for production
 
-| Role | Email |
-|---|---|
-| Admin | admin@medbridge.com |
-| Doctor | doctor1@medbridge.com |
-| CHW | chw1@medbridge.com |
-| Pharmacist | pharmacist1@medbridge.com |
+```bash
+npm run build
+npm run start
+```
 
-The login page has one-tap demo buttons that prefill these credentials. They
-still perform a real `POST /auth/login` — no client-side bypass.
-
-## Architecture
+## Project Structure
 
 ```
 src/
-├── app/
-│   ├── (public)/     public pages — no auth
-│   ├── (auth)/       login, register
-│   ├── patient/      PATIENT role only
-│   ├── chw/          CHW role only
-│   ├── doctor/       DOCTOR role only
-│   ├── pharmacist/   PHARMACIST role only
-│   └── admin/        ADMIN role only
+├── app/                  # Routes (App Router) - grouped by role
+│   ├── (auth)/           # Login, register, password recovery
+│   ├── (public)/         # Marketing site, doctor/CHW directories
+│   ├── patient/
+│   ├── doctor/
+│   ├── chw/
+│   ├── pharmacist/
+│   └── admin/
 ├── components/
-│   ├── ui/           Button, Input, Badge, Card, Modal, Toast, Skeleton…
-│   ├── layout/       Navbar, Sidebar, BottomNav, RoleShell, Footer
-│   ├── shared/       StatCard, NotificationPanel, SearchBar, VitalChip
-│   └── chat/         ChatWindow, ChatSidebar
-├── hooks/            one file per backend module — all API calls live here
-├── lib/              api.ts (axios), auth.ts (cookies), socket.ts, utils.ts
-├── types/            TypeScript mirrors of every backend entity
-└── middleware.ts     route protection + role redirects
+│   ├── ui/               # Base primitives (Button, Card, Modal, ...)
+│   ├── layout/            # Navbar, Sidebar, RoleShell
+│   ├── shared/            # Domain components (pickers, boards, panels)
+│   └── chat/              # Chat sidebar/window
+├── hooks/                # Data-fetching hooks, one per domain
+├── lib/                  # API client, auth, socket, prescribing helpers
+├── types/                # Shared TypeScript types
+└── i18n/                 # next-intl configuration
+messages/
+├── en.json               # English strings
+└── bn.json                # Bangla strings
 ```
 
-### Rules the code follows
+## Branching model
 
-- **No component calls axios directly.** Pages call hooks; hooks call `api`.
-- **Every response is unwrapped** with `unwrap()` because the backend wraps
-  everything in `{ success, data, message }`.
-- **Session lives in cookies**, not localStorage — middleware runs server-side
-  and cannot read localStorage.
-- **`'use client'`** on every page with state, effects, or event handlers.
-- **Prescriptions have no edit UI.** The API offers cancel-with-reason only.
-- **Chat input locks** when the consultation status is COMPLETED or the socket
-  emits `consultationEnded`.
+- `main` — stable, deployable
+- `dev` — integration branch; all feature work merges here first
+- `feat/*` — individual feature branches, opened as PRs into `dev`
 
-## Verified
+## Team
 
-`next build` compiles clean with zero TypeScript errors. All 23 routes
-generate, middleware active.
+| Area | Contributor |
+|---|---|
+| Patient & Doctor pages | Rashed |
+| CHW & Public pages | Patho |
+| Admin & Auth pages | Tanvir |
+| Pharmacist pages | Rahat |
+
+## License
+
+This project is developed for academic purposes as part of a university course project.
