@@ -289,6 +289,7 @@
 //             </form>
 //           </div>
 
+
 //           {/* Fixed bottom bar: submit + login link, always visible regardless of scroll */}
 //           <div className="flex-none space-y-3 border-t border-slate-100 p-5">
 //             <Button type="submit" form="register-form" fullWidth loading={registerPatient.isPending}>
