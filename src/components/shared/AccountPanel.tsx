@@ -16,11 +16,6 @@ import { useUploadPhoto } from '@/hooks/useUsers';
 import { saveUser } from '@/lib/auth';
 import { apiError } from '@/lib/api';
 
-/**
- * The one account screen every role gets. Profile fields are managed by an
- * admin (only ADMIN can PATCH /users/:id), so the only things a user changes
- * about themselves are their photo and their password.
- */
 export default function AccountPanel() {
   const { toast } = useToast();
   const user = useCurrentUser();
@@ -41,7 +36,6 @@ export default function AccountPanel() {
       { id: user.id, file },
       {
         onSuccess: (updated) => {
-          // keep the cookie in step so the navbar avatar updates immediately
           saveUser({ ...user, profileImage: updated.profileImage });
           toast(t('photoUpdated'));
         },
