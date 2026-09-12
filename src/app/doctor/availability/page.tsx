@@ -22,7 +22,7 @@ import {
 import { apiError } from '@/lib/api';
 import { formatDate } from '@/lib/utils';
 
-/** dayOfWeek follows the JS convention the backend uses: 0 = Sunday. */
+
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 const SLOT_LENGTHS = [15, 20, 30, 45, 60];
@@ -56,7 +56,7 @@ export default function DoctorAvailabilityPage() {
   const [offDate, setOffDate] = useState('');
   const [offReason, setOffReason] = useState('');
 
-  // the server copy is the source of truth until the doctor edits something
+  
   useEffect(() => {
     if (!data || dirty) return;
     setSlots(
@@ -97,7 +97,7 @@ export default function DoctorAvailabilityPage() {
       );
     }
 
-    // PUT replaces the whole pattern, so everything currently on screen is sent
+   
     save.mutate(slots, {
       onSuccess: () => {
         toast('Consulting hours saved');

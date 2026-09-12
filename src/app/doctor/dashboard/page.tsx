@@ -25,7 +25,6 @@ import { formatTime } from '@/lib/utils';
 
 export default function DoctorDashboardPage() {
   const user = useCurrentUser();
-  // counters are aggregated in SQL; the lists below are only what fits on screen
   const { data: stats, isLoading: statsLoading } = useDoctorStats();
   const { data: consultations, isLoading } = useConsultations();
 
