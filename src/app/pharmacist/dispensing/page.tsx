@@ -16,13 +16,7 @@ import { useDispensingQueue } from '@/hooks/useDispensing';
 import { formatDate, timeAgo } from '@/lib/utils';
 import type { Prescription, PrescriptionItem } from '@/types';
 
-/**
- * The pharmacy counter queue: active prescriptions still owing medicine,
- * oldest first. Only a pharmacist can actually hand anything over, so this is
- * the one screen where stock and prescriptions meet.
- */
 
-/** Waiting longer than this and someone has probably given up and gone home. */
 const STALE_DAYS = 3;
 
 function daysWaiting(iso: string): number {
