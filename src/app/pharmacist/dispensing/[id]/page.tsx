@@ -99,7 +99,7 @@ export default function DispensePrescriptionPage() {
       },
     );
   };
-  
+
 
   if (isLoading) return <ListSkeleton rows={5} />;
 
@@ -148,6 +148,7 @@ export default function DispensePrescriptionPage() {
           the patient on this prescription.
         </Alert>
       )}
+
 
       <div className="grid gap-4 lg:grid-cols-3">
         <div className="space-y-4 lg:col-span-2">
