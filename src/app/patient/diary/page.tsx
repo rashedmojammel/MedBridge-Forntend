@@ -34,11 +34,6 @@ import { apiError } from '@/lib/api';
 import { cn } from '@/lib/utils';
 import type { DiaryEntry, DiaryMood } from '@/types';
 
-/**
- * The patient's own health diary. Everything written here is visible to the
- * doctor and CHW looking after them, which the page says out loud rather than
- * leaving people to guess.
- */
 
 const MOODS: {
   value: DiaryMood;
