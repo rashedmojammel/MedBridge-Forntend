@@ -38,14 +38,12 @@ type FormValues = {
   currentMedications?: string;
 };
 
-// Written the same way in both languages, so they are values and labels at once.
 const BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'];
 
 const GENDERS = ['MALE', 'FEMALE', 'OTHER'] as const;
 
 const RELATIONS = ['SPOUSE', 'PARENT', 'SIBLING', 'CHILD', 'OTHER'] as const;
 
-/** One row of the credentials modal, with its own copy-to-clipboard state. */
 function CredentialRow({ label, value }: { label: string; value: string }) {
   const t = useTranslations('chw.patientNew');
   const [copied, setCopied] = useState(false);
@@ -56,8 +54,7 @@ function CredentialRow({ label, value }: { label: string; value: string }) {
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
     } catch {
-      // clipboard API can be unavailable (older WebViews) - the value is
-      // still selectable/readable on screen, so this is a silent no-op
+     
     }
   };
 
@@ -97,9 +94,7 @@ export default function RegisterPatientPage() {
   const trel = useTranslations('enums.relation');
   const f = useFormat();
 
-  // Held until the CHW confirms they've read the credentials out - only
-  // then do we navigate away, since this is the one and only time the
-  // temporary password is ever shown.
+  
   const [result, setResult] = useState<CreatePatientResult | null>(null);
 
   const schema = useMemo(
@@ -136,9 +131,7 @@ export default function RegisterPatientPage() {
     createPatient.mutate(values, {
       onSuccess: (created) => {
         toast(t('registered', { mrn: f.digits(created.patient.mrn) }));
-        // Stay on this page behind the credentials modal instead of
-        // navigating immediately - the temp password is unrecoverable
-        // once the CHW clicks away, so they need to actually record it.
+        
         setResult(created);
       },
       onError: (e) => toast(apiError(e, t('failed')), 'error'),
