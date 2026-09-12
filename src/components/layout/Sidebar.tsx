@@ -15,7 +15,7 @@ export default function Sidebar({ items }: { items: NavItem[] }) {
   const pathname = usePathname();
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-30 hidden w-56 shrink-0 overflow-y-auto border-r border-slate-200 bg-white p-3 lg:block">
+    <aside className="hidden w-56 shrink-0 border-r border-slate-200 bg-white p-3 lg:block">
       <nav className="space-y-0.5">
         {items.map((item) => {
           const active = pathname === item.href || pathname.startsWith(item.href + '/');
