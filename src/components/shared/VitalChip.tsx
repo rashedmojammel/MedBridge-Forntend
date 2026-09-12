@@ -14,7 +14,6 @@ export default function VitalChip({
   unit?: string;
   tone?: 'normal' | 'warning' | 'critical';
 }) {
-  // localised here rather than at every call site - a reading is a reading
   const f = useFormat();
   const colour = {
     normal: 'text-green-700',

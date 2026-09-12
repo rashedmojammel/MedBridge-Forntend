@@ -5,7 +5,6 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import type { NavItem } from './Sidebar';
 
-/** Mobile-only tab bar - mirrors the sidebar items. */
 export default function BottomNav({ items }: { items: NavItem[] }) {
   const pathname = usePathname();
   const visible = items.slice(0, 5);
