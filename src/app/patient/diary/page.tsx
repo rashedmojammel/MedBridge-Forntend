@@ -48,14 +48,6 @@ const MOODS: {
 
 const moodOf = (m: DiaryMood) => MOODS.find((x) => x.value === m) ?? MOODS[1];
 
-/**
- * Tapped rather than typed — most people are on a phone.
- *
- * These stay English because they are the values sent to the backend and read
- * back by clinicians working in English; `enums.symptom` supplies the Bangla
- * label to show over them. A symptom the patient types in Bangla has no key, so
- * it renders exactly as written.
- */
 const COMMON_SYMPTOMS = [
   'Fever',
   'Headache',
@@ -348,7 +340,6 @@ function NewEntry({ onClose }: { onClose: () => void }) {
   const submit = () => {
     if (note.trim().length < 3) return toast(t('noteRequired'), 'error');
 
-    // a patient omits patientId - the backend resolves it from the token
     create.mutate(
       {
         note: note.trim(),
