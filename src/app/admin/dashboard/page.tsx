@@ -25,7 +25,6 @@ import { useUsers } from '@/hooks/useUsers';
 import { useAdminStats } from '@/hooks/useStats';
 
 export default function AdminDashboardPage() {
-  // every counter is a SQL aggregate; the user list is only the newest few
   const { data: stats, isLoading: statsLoading } = useAdminStats();
   const { data: users, isLoading } = useUsers();
 
