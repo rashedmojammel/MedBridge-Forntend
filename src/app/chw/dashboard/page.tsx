@@ -28,7 +28,6 @@ import { useFormat } from '@/hooks/useFormat';
 
 export default function ChwDashboardPage() {
   const user = useCurrentUser();
-  // counters are aggregated server-side; the lists below are only the top few
   const { data: stats, isLoading: statsLoading } = useChwStats();
   const { data: patients, isLoading: patientsLoading } = usePatients();
   const { data: consultations, isLoading: consultLoading } = useConsultations();
