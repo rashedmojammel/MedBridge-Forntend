@@ -24,15 +24,15 @@ const schema = z.object({
   role: z.enum(['DOCTOR', 'CHW', 'PHARMACIST', 'STAFF', 'ADMIN']),
   password: z.string().min(6, 'Password must be at least 6 characters'),
   isPublic: z.boolean().optional(),
-  // doctor
+ 
   specialization: z.string().optional(),
   qualifications: z.string().optional(),
   experienceYears: z.coerce.number().optional(),
   licenseNumber: z.string().optional(),
   bio: z.string().optional(),
-  // chw
+
   assignedArea: z.string().optional(),
-  // staff / pharmacist
+
   department: z.string().optional(),
   designation: z.string().optional(),
 });
@@ -51,6 +51,7 @@ export default function AddUserPage() {
     resolver: zodResolver(schema) as any,
     defaultValues: { role: 'DOCTOR', isPublic: true } as any,
   });
+
 
   const onSubmit = (values: any) => {
     const base = {

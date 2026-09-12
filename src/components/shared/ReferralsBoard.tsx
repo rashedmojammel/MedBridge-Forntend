@@ -34,13 +34,6 @@ import { useFormat } from '@/hooks/useFormat';
 import { apiError } from '@/lib/api';
 import type { Patient, Referral, ReferralStatus, ReferralUrgency } from '@/types';
 
-/**
- * The referrals a doctor or CHW has raised. The API scopes the list to the
- * clinician who raised each one, so both roles get the same screen - only the
- * copy and the links differ.
- */
-
-/** Labels come from `enums.urgency`, the explanatory note from `referrals.urgencyNote`. */
 const URGENCIES: ReferralUrgency[] = ['ROUTINE', 'URGENT', 'EMERGENCY'];
 
 const URGENCY_TONE: Record<ReferralUrgency, 'gray' | 'orange' | 'red'> = {
@@ -49,14 +42,7 @@ const URGENCY_TONE: Record<ReferralUrgency, 'gray' | 'orange' | 'red'> = {
   EMERGENCY: 'red',
 };
 
-/**
- * Common destinations, typed free-hand if the facility is not one of these.
- *
- * These are translated, unlike the enum values elsewhere in the sweep: a
- * datalist writes the option straight into the input, so the suggestion *is*
- * the stored value. The field is free text on a referral only its author can
- * list, so a Bangla suggestion is worth more than a matching English string.
- */
+
 const FACILITY_TYPE_KEYS = [
   'DISTRICT_HOSPITAL',
   'HEALTH_CENTRE',
@@ -93,7 +79,6 @@ function Board({ role }: { role: 'DOCTOR' | 'CHW' }) {
   const { data: prefilled } = usePatient(patientIdParam ?? undefined);
   const update = useUpdateReferral();
 
-  // arriving from a patient record means the intent is already "refer this person"
   useEffect(() => {
     if (patientIdParam) setCreating(true);
   }, [patientIdParam]);
@@ -139,7 +124,7 @@ function Board({ role }: { role: 'DOCTOR' | 'CHW' }) {
 
       {emergencies > 0 && (
         <Alert tone="danger" title={t('openEmergencyTitle')} className="mb-4">
-          {/* raw count - ICU picks the plural form and localises the digit */}
+          {}
           {t('openEmergencyBody', { count: emergencies })}
         </Alert>
       )}
@@ -345,7 +330,6 @@ function NewReferral({
     if (!facilityName.trim()) return toast(t('vFacility'), 'error');
     if (reason.trim().length < 4) return toast(t('vReason'), 'error');
 
-    // built field by field - the API rejects unknown properties
     create.mutate(
       {
         patientId: patient.id,
@@ -409,7 +393,7 @@ function NewReferral({
             value={facilityType}
             onChange={(e) => setFacilityType(e.target.value)}
           />
-          {/* free text, so offer the usual answers without forcing one */}
+          {}
           <datalist id="referral-facility-types">
             {FACILITY_TYPE_KEYS.map((k) => (
               <option key={k} value={t(`facilityTypes.${k}`)} />
@@ -539,7 +523,6 @@ function CloseReferral({
 }
 
 export default function ReferralsBoard({ role }: { role: 'DOCTOR' | 'CHW' }) {
-  // reading ?patientId needs a suspense boundary to prerender
   return (
     <Suspense fallback={<ListSkeleton rows={4} />}>
       <Board role={role} />

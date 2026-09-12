@@ -71,8 +71,7 @@ export default function Footer() {
 
       <div className="border-t border-slate-200">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-slate-400 sm:flex-row">
-          {/* The year is passed as a pre-formatted string so ICU inserts it
-              verbatim - a numeric argument would come out as "2,026". */}
+          {}
           <p>{t('copyright', { year: localizeDigits(COPYRIGHT_YEAR, locale) })}</p>
           <div className="flex gap-4">
             <Link href="#" className="hover:text-slate-600">{t('privacy')}</Link>

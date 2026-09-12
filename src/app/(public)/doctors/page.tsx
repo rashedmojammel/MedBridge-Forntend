@@ -21,11 +21,7 @@ import { usePublicDoctors } from '@/hooks/useUsers';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useFormat } from '@/hooks/useFormat';
 
-/**
- * These are query values sent to the backend, not labels - `usePublicDoctors`
- * passes the selected one straight through as the `specialization` filter. They
- * stay English; only the chip text is translated, via enums.specialization.
- */
+
 const SPECIALIZATIONS = [
   'All',
   'Cardiology',
@@ -35,10 +31,7 @@ const SPECIALIZATIONS = [
   'General Medicine',
 ];
 
-/**
- * Card background - shows the doctor's real photo full-bleed when available;
- * falls back to an icon + gradient per specialty when there's no photo on file.
- */
+
 const SPECIALTY_STYLE: Record<string, { icon: LucideIcon; gradient: string }> = {
   Cardiology: { icon: HeartPulse, gradient: 'from-rose-400 to-rose-600' },
   Neurology: { icon: Brain, gradient: 'from-violet-400 to-violet-600' },
@@ -121,7 +114,6 @@ export default function DoctorsDirectoryPage() {
                     href={`/doctors/${d.id}`}
                     className="group relative flex aspect-[3/4] w-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-slate-100 transition-all hover:border-blue-300 hover:shadow-lg"
                   >
-                    {/* Full-bleed photo, falls back to specialty icon/gradient when no image */}
                     {d.profileImage ? (
                       <img
                         src={d.profileImage}
@@ -140,7 +132,6 @@ export default function DoctorsDirectoryPage() {
                       </div>
                     )}
 
-                    {/* Scrim so text stays legible over any photo */}
                     <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
 
                     <Badge tone="blue" className="relative z-10 m-3 self-start shadow-sm">

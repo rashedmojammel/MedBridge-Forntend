@@ -20,12 +20,7 @@ export function usePatient(id?: number | string) {
   });
 }
 
-/**
- * The backend now creates a login account alongside the patient record, so
- * the response is `{ patient, credentials }` rather than a bare Patient -
- * see PatientsService.create(). `credentials` is only ever present in this
- * one response; there is nowhere else in the app it can be fetched from.
- */
+
 export function useCreatePatient() {
   const qc = useQueryClient();
   return useMutation({
@@ -47,7 +42,3 @@ export function useUpdatePatient(id: number) {
   });
 }
 
-/**
- * No delete route by design - a patient record anchors triage history,
- * consultations, and prescriptions. Correct the record with `useUpdatePatient`.
- */

@@ -12,8 +12,7 @@ import {
 import { useTranslations } from 'next-intl';
 import RoleShell from '@/components/layout/RoleShell';
 
-// only the first five reach the mobile bottom bar, so order is field priority;
-// registering a patient stays one tap away from the patients screen itself
+
 const NAV = [
   { href: '/chw/dashboard', key: 'dashboard', icon: LayoutDashboard },
   { href: '/chw/patients', key: 'patients', icon: Users },

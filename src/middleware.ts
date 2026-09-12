@@ -6,7 +6,6 @@ const PUBLIC_PATHS = [
   '/login',
   '/register',
   '/forgot-password',
-  // the backend emails this link, so it must open without a session
   '/reset-password',
   '/doctors',
   '/chws',
@@ -14,7 +13,6 @@ const PUBLIC_PATHS = [
   '/contact',
 ];
 
-/** Route prefix -> role allowed to be there. */
 const ROLE_ROUTES: Record<string, string> = {
   '/patient': 'PATIENT',
   '/chw': 'CHW',
@@ -47,20 +45,17 @@ export function middleware(request: NextRequest) {
       const user = JSON.parse(userRaw);
       return NextResponse.redirect(new URL(DASHBOARDS[user.role] ?? '/', request.url));
     } catch {
-      // fall through
     }
   }
 
   if (isPublic) return NextResponse.next();
 
-  // Protected route with no token -> login
   if (!token) {
     const url = new URL('/login', request.url);
     url.searchParams.set('from', pathname);
     return NextResponse.redirect(url);
   }
 
-  // Right token, wrong role -> bounce to their own dashboard
   if (userRaw) {
     try {
       const user = JSON.parse(userRaw);
