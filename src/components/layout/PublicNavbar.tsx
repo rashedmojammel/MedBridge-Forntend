@@ -1,14 +1,15 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import LanguageToggle from '@/components/LanguageToggle';
-import { cn } from '@/lib/utils';
+import { Tabs } from '@/components/ui/vercel-tabs';
+import { useRouter } from 'next/navigation';
 
 // `key` indexes the publicNav namespace; the label itself is resolved at render
 // so a language switch re-labels the nav without a reload.
@@ -22,41 +23,36 @@ const LINKS = [
 
 export default function PublicNavbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const t = useTranslations('publicNav');
   const tc = useTranslations('common');
+
+  // Tabs component keys by id, so route path doubles as the tab id.
+  const tabs = LINKS.map((l) => ({ id: l.href, label: t(l.key), href: l.href }));
+  const activeTab = LINKS.find((l) => l.href === pathname)?.href ?? '/';
 
   return (
     <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2 text-lg font-semibold text-blue-600">
-  <Image
-    src="/medbridge-icon.png"
-    alt="Medbridge"
-    width={32}
-    height={32}
-    className="h-16 w-16"
-    priority
-  />
-  Medbridge
-</Link>
+          <Image
+            src="/medbridge-icon.png"
+            alt="Medbridge"
+            width={32}
+            height={32}
+            className="h-16 w-16"
+            priority
+          />
+          Medbridge
+        </Link>
 
-        <nav className="hidden items-center gap-1 md:flex">
-          {LINKS.map((l) => {
-            const active = pathname === l.href;
-            return (
-              <Link
-                key={l.href}
-                href={l.href}
-                className={cn(
-                  'rounded-lg px-3 py-2 text-sm font-medium transition-colors',
-                  active ? 'text-blue-700' : 'text-slate-600 hover:text-slate-900',
-                )}
-              >
-                {t(l.key)}
-              </Link>
-            );
-          })}
+        <nav className="hidden md:flex">
+          <Tabs
+            tabs={tabs}
+            activeTab={activeTab}
+            onTabChange={(tabId) => router.push(tabId)}
+          />
         </nav>
 
         <div className="hidden items-center gap-2 md:flex">

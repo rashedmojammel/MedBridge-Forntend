@@ -1,12 +1,10 @@
 import Link from 'next/link';
-import { HeartPulse, Mail, MapPin, Phone } from 'lucide-react';
+import Image from 'next/image';
+import { Mail, MapPin, Phone } from 'lucide-react';
 import { useTranslations, useLocale } from 'next-intl';
 import { localizeDigits } from '@/lib/utils';
 import type { Locale } from '@/i18n/config';
 
-// Hardcoded rather than `new Date().getFullYear()` - this is a server component
-// (no "use client"), so that value is computed once at server-render time and
-// again at client hydration, producing a mismatch across the New Year boundary.
 const COPYRIGHT_YEAR = 2026;
 
 export default function Footer() {
@@ -19,7 +17,13 @@ export default function Footer() {
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-14 sm:grid-cols-2 lg:grid-cols-4">
         <div>
           <div className="flex items-center gap-2 text-lg font-semibold text-blue-600">
-            <HeartPulse className="h-5 w-5" aria-hidden />
+            <Image
+              src="/medbridge-icon.png"
+              alt="Medbridge"
+              width={32}
+              height={32}
+              className="h-8 w-8"
+            />
             Medbridge
           </div>
           <p className="mt-3 text-sm leading-relaxed text-slate-500">{t('tagline')}</p>

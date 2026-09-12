@@ -275,7 +275,45 @@
     },
     "ctaTitle": "Ready to consult a doctor?",
     "ctaBody": "Registration takes under two minutes and is free for rural patients.",
-    "browseDoctors": "Browse doctors"
+    "browseDoctors": "Browse doctors",
+    "trust": {
+      "title": "Built with health workers, for rural Bangladesh",
+      "body": "Medbridge is not a video-call app with a medical theme. It is a path a community health worker walks with you — registering your record, taking your vitals, and staying in the loop after the doctor has replied.",
+      "points": {
+        "privacy": {
+          "title": "Your records stay between your care team",
+          "body": "Only the doctor and health worker looking after you can see your consultations, prescriptions, and diary entries. Nobody else."
+        },
+        "chwBacked": {
+          "title": "A trained health worker is always in the loop",
+          "body": "If you don't have a smartphone, your CHW carries the platform to you, records your vitals, and books the consultation on your behalf."
+        },
+        "coverage": {
+          "title": "Serving rural unions and upazilas",
+          "body": "Our partner health workers and clinics cover villages across Lakshmipur, Noakhali, Bhola, and Feni, with more districts joining."
+        }
+      }
+    },
+    "faq": {
+      "title": "Common questions",
+      "subtitle": "If something else is on your mind, our contact page has more.",
+      "cost": {
+        "q": "Is this free?",
+        "a": "Consultations are free for rural patients registered through a community health worker. You only pay for medicines at the pharmacy, the same as anywhere else."
+      },
+      "noSmartphone": {
+        "q": "What if I don't have a smartphone?",
+        "a": "You don't need one. A community health worker visits your village, registers your record, takes your vitals, and relays the consultation for you on their device."
+      },
+      "privacy": {
+        "q": "Who can see my health records?",
+        "a": "Only the doctor and health worker directly involved in your care. Your information is never shared with anyone else, including other patients or providers."
+      },
+      "emergency": {
+        "q": "What about a medical emergency?",
+        "a": "Medbridge is not an emergency service. For a medical emergency, call your national emergency number or go to the nearest hospital directly. Critical vitals recorded on the platform do alert a doctor immediately, but this is not a substitute for emergency care."
+      }
+    }
   },
   "howItWorks": {
     "metaTitle": "How it works · Medbridge",
@@ -406,14 +444,8 @@
   "auth": {
     "login": {
       "title": "Log in to Medbridge",
-    "subtitle": "Rural healthcare consultation platform",
-    "brandTitle": "Care coordination, in one place.",
-    "brandSubtitle": "Connect patients, doctors, community health workers, and pharmacists on a single trusted platform.",
-    "brandPoint1": "Secure, role-based access for every care team member.",
-    "brandPoint2": "Built for real-world clinics, not just hospitals.",
-    "brandPoint3": "Live updates so nothing falls through the cracks.",
-    "brandFooter": "All rights reserved.",
-    "invalid": "Invalid email or password",
+      "subtitle": "Rural healthcare consultation platform",
+      "invalid": "Invalid email or password",
       "email": "Email",
       "emailPlaceholder": "name@medbridge.com",
       "password": "Password",
@@ -428,14 +460,8 @@
     },
     "register": {
       "title": "Patient registration",
-    "subtitle": "Create your account to consult with a doctor. Takes about two minutes.",
-    "brandTitle": "Your care, one step ahead.",
-    "brandSubtitle": "Create your patient account to book visits, reach your care team, and keep your records in one place.",
-    "brandPoint1": "Your data is encrypted and only shared with your care team.",
-    "brandPoint2": "Get matched with doctors and community health workers near you.",
-    "brandPoint3": "Takes less than five minutes to set up.",
-    "brandFooter": "All rights reserved.",
-    "failed": "Registration failed",
+      "subtitle": "Create your account to consult with a doctor. Takes about two minutes.",
+      "failed": "Registration failed",
       "personalSection": "Personal information",
       "fullName": "Full name",
       "fullNamePlaceholder": "Rahim Ahmed",
@@ -704,14 +730,14 @@
       "vEcName": "Emergency contact name is required",
       "vEcPhone": "Emergency contact phone is required",
       "credentialsTitle": "Patient login created",
-"credentialsWarning": "Read this out to the patient now. It will not be shown again — if it's lost, an admin will need to reset the password.",
-"credentialsMrn": "MRN",
-"credentialsEmail": "Login email",
-"credentialsPassword": "Temporary password",
-"copy": "Copy",
-"copied": "Copied",
-"copyAll": "Copy all",
-"credentialsDone": "I've shared this with the patient"
+      "credentialsWarning": "Read this out to the patient now. It will not be shown again — if it's lost, an admin will need to reset the password.",
+      "credentialsMrn": "MRN",
+      "credentialsEmail": "Login email",
+      "credentialsPassword": "Temporary password",
+      "copy": "Copy",
+      "copied": "Copied",
+      "copyAll": "Copy all",
+      "credentialsDone": "I've shared this with the patient"
     },
     "triageIndex": {
       "title": "Triage",
@@ -809,23 +835,23 @@
     },
     "schedule": {
       "title": "Schedule",
-      "subtitle": "Book follow-ups for your patients against a doctor's real consulting hours.",
-      "book": "Book appointment",
+      "subtitle": "Book consultations for your patients against a doctor's real consulting hours.",
+      "book": "Book consultation",
       "placeholder": "Filter by patient, MRN, or doctor…",
       "noMatchTitle": "Nothing matched that filter",
       "emptyUpcomingTitle": "Nothing booked yet",
-      "emptyUpcomingBody": "Book a follow-up so the patient gets a reminder the day before.",
-      "emptyPastTitle": "No past appointments",
-      "emptyPastBody": "Completed and expired appointments show up here.",
+      "emptyUpcomingBody": "Book a consultation so the patient and doctor are notified.",
+      "emptyPastTitle": "No past consultations",
+      "emptyPastBody": "Completed and expired consultations show up here.",
       "noMatchBody": "Try a different name, MRN, or doctor.",
       "unassigned": "Unassigned",
       "cancelledReason": "Cancelled: {reason}",
-      "modalTitle": "Book an appointment",
+      "modalTitle": "Book a consultation",
       "chooseDoctor": "Choose a doctor…",
       "checkingDiary": "Checking the doctor's diary…",
       "noSlots": "{reason} — enter a time yourself and confirm it with the doctor.",
       "noSlotsFallback": "No free slots that day",
-      "bookFootnote": "The patient is notified as soon as you book, and again the morning before.",
+      "bookFootnote": "The patient and doctor are both notified as soon as you book.",
       "cancelTitle": "Cancel appointment",
       "keepIt": "Keep it",
       "cancelReasonPlaceholder": "Patient travelling, rescheduling next week",
@@ -834,12 +860,14 @@
       "pickDoctor": "Choose a doctor",
       "pickDateTime": "Pick a date and time",
       "invalidTime": "That time is not valid",
-      "booked": "Booked for {name}",
-      "bookFailed": "Could not book the appointment",
+      "booked": "Consultation booked for {name}",
+      "bookFailed": "Could not book the consultation",
       "reasonRequired": "Give a reason for the cancellation",
       "cancelled": "Appointment cancelled",
       "cancelFailed": "Could not cancel",
-      "cancelSummary": "{patient} with {doctor} on {when}."
+      "cancelSummary": "{patient} with {doctor} on {when}.",
+      "reasonLabel": "Reason for consultation",
+      "reasonPlaceholder": "What is the patient experiencing?"
     }
   },
   "vitals": {
@@ -856,8 +884,6 @@
     "respShort": "Resp",
     "sugarShort": "Sugar"
   },
-  
-
   "chat": {
     "noMessages": "No messages yet. Say hello to start the consultation.",
     "you": "You",
@@ -1127,13 +1153,5 @@
     "linkAlternative": "Link an alternative",
     "created": "{name} added to the catalogue",
     "createFailed": "Could not add medicine"
-  },
-  "notFound": {
-  "title": "পেজটি খুঁজে পাওয়া যায়নি",
-  "body": "আপনি যে পেজটি খুঁজছেন সেটি নেই অথবা সরিয়ে ফেলা হয়েছে।",
-  "backHome": "হোমে ফিরে যান",
-  "browseDoctors": "ডাক্তার দেখুন",
-  "helpText": "এখনও সমস্যা হচ্ছে?",
-  "contactLink": "যোগাযোগ করুন"
-}
+  }
 }

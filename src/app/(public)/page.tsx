@@ -13,6 +13,10 @@ import {
   CalendarClock,
   ArrowRight,
   Check,
+  ShieldCheck,
+  Users,
+  MapPin,
+  ChevronDown,
 } from 'lucide-react';
 import { CountingNumber } from '@/components/ui/CountingNumber';
 
@@ -43,6 +47,16 @@ const FEATURES = [
   { Icon: Pill, key: 'medicines' },
   { Icon: CalendarClock, key: 'followUp' },
 ] as const;
+
+/** home.trust.points.<key> supplies the label for each. */
+const TRUST_KEYS = [
+  { Icon: ShieldCheck, key: 'privacy' },
+  { Icon: Users, key: 'chwBacked' },
+  { Icon: MapPin, key: 'coverage' },
+] as const;
+
+/** home.faq.<key>.q / .a supplies each question and answer. */
+const FAQ_KEYS = ['cost', 'noSmartphone', 'privacy', 'emergency'] as const;
 
 export default function HomePage() {
   const t = useTranslations('home');
@@ -200,6 +214,69 @@ export default function HomePage() {
               </motion.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ---------- Trust & privacy ---------- */}
+      <section className="mx-auto max-w-6xl px-4 py-20">
+        <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
+          <motion.div {...fadeUp}>
+            <h2 className="text-3xl font-semibold text-slate-900">{t('trust.title')}</h2>
+            <p className="mt-3 text-slate-500">{t('trust.body')}</p>
+          </motion.div>
+
+          <div className="space-y-4">
+            {TRUST_KEYS.map((item, i) => (
+              <motion.div
+                key={item.key}
+                {...fadeUp}
+                transition={{ duration: 0.35, delay: i * 0.05 }}
+                className="flex items-start gap-4 rounded-xl border border-slate-200 bg-white p-5"
+              >
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-50">
+                  <item.Icon className="h-[18px] w-[18px] text-blue-600" aria-hidden />
+                </div>
+                <div>
+                  <h3 className="text-sm font-semibold text-slate-900">
+                    {t(`trust.points.${item.key}.title`)}
+                  </h3>
+                  <p className="mt-1 text-sm leading-relaxed text-slate-500">
+                    {t(`trust.points.${item.key}.body`)}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ---------- FAQ ---------- */}
+      <section className="border-y border-slate-200 bg-slate-50">
+        <div className="mx-auto max-w-3xl px-4 py-20">
+          <motion.div {...fadeUp} className="text-center">
+            <h2 className="text-3xl font-semibold text-slate-900">{t('faq.title')}</h2>
+            <p className="mt-3 text-slate-500">{t('faq.subtitle')}</p>
+          </motion.div>
+
+          <motion.div
+            {...fadeUp}
+            className="mt-10 divide-y divide-slate-200 overflow-hidden rounded-xl border border-slate-200 bg-white"
+          >
+            {FAQ_KEYS.map((key) => (
+              <details key={key} className="group px-5 py-4 open:bg-slate-50/60">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-sm font-medium text-slate-900">
+                  {t(`faq.${key}.q`)}
+                  <ChevronDown
+                    className="h-4 w-4 shrink-0 text-slate-400 transition-transform group-open:rotate-180"
+                    aria-hidden
+                  />
+                </summary>
+                <p className="mt-2.5 text-sm leading-relaxed text-slate-500">
+                  {t(`faq.${key}.a`)}
+                </p>
+              </details>
+            ))}
+          </motion.div>
         </div>
       </section>
 
