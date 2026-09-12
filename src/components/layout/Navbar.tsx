@@ -38,7 +38,14 @@ export default function Navbar() {
           href={user ? dashboardFor(user.role) : '#'}
           className="flex items-center gap-2 font-semibold text-blue-600"
         >
-          <HeartPulse className="h-5 w-5" aria-hidden />
+          <Image
+            src="/medbridge-icon.png"
+            alt="Medbridge"
+            width={20}
+            height={20}
+            className="h-5 w-5"
+            priority
+          />
           <span>Medbridge</span>
         </Link>
 
