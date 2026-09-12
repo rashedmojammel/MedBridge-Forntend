@@ -15,7 +15,7 @@ export default function SearchBar({
   placeholder?: string;
   className?: string;
 }) {
-  // resolved here rather than as a default parameter - `t` is a hook
+  
   const t = useTranslations('common');
   return (
     <div
