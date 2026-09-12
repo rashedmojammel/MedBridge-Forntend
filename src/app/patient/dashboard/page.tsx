@@ -27,7 +27,6 @@ import { useFormat } from '@/hooks/useFormat';
 
 export default function PatientDashboardPage() {
   const user = useCurrentUser();
-  // /stats/patient returns null when the account has no patient record behind it
   const { data: stats, isLoading: statsLoading } = usePatientStats();
   const { data: prescriptions, isLoading: rxLoading } = usePrescriptions();
   const { data: appointments, isLoading: apptLoading } = useAppointments('upcoming');

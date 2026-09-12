@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
+import { useTranslations, useLocale } from 'next-intl';
 import {
   MessageSquare,
   FileText,
@@ -22,41 +23,30 @@ const fadeUp = {
   transition: { duration: 0.4 },
 };
 
-const STEPS = [
-  {
-    n: '01',
-    title: 'Register with a health worker',
-    body: 'A Community Health Worker registers you and assigns a permanent Medical Record Number.',
-  },
-  {
-    n: '02',
-    title: 'Vitals are recorded',
-    body: 'Your CHW measures temperature, blood pressure, pulse, and oxygen. Critical readings alert doctors instantly.',
-  },
-  {
-    n: '03',
-    title: 'Chat with a doctor',
-    body: 'A qualified doctor reviews your case and consults with you over text. No video, no bandwidth problems.',
-  },
-];
+const STEP_KEYS = ['register', 'vitals', 'chat'] as const;
+const ASSURANCE_KEYS = ['free', 'licensed', 'lowBandwidth'] as const;
 
+/** Numeric targets stay in code so CountingNumber can animate them; only the
+ *  label comes from the message files (stats.<key>Label). */
 const STATS = [
-  { target: 50, suffix: '+', label: 'Doctors' },
-  { target: 120, suffix: '+', label: 'Health workers' },
-  { target: 5000, suffix: '+', label: 'Patients served' },
-  { target: 1200, suffix: '+', label: 'Consultations' },
-];
+  { key: 'doctors', target: 50, suffix: '+' },
+  { key: 'chws', target: 120, suffix: '+' },
+  { key: 'patients', target: 5000, suffix: '+' },
+  { key: 'consultations', target: 1200, suffix: '+' },
+] as const;
 
 const FEATURES = [
-  { Icon: MessageSquare, title: 'Chat consultations', body: 'Text-based, so it works on any connection.' },
-  { Icon: FileText, title: 'Digital prescriptions', body: 'View and download prescriptions anytime.' },
-  { Icon: Stethoscope, title: 'Community health workers', body: 'Trained CHWs bridge villages and doctors.' },
-  { Icon: BellRing, title: 'Emergency alerts', body: 'Critical vitals notify doctors immediately.' },
-  { Icon: Pill, title: 'Medicine search', body: 'Search thousands of Bangladesh medicines.' },
-  { Icon: CalendarClock, title: 'Follow-up care', body: 'Schedule follow-ups and get reminders.' },
-];
+  { Icon: MessageSquare, key: 'chat' },
+  { Icon: FileText, key: 'prescriptions' },
+  { Icon: Stethoscope, key: 'chws' },
+  { Icon: BellRing, key: 'alerts' },
+  { Icon: Pill, key: 'medicines' },
+  { Icon: CalendarClock, key: 'followUp' },
+] as const;
 
 export default function HomePage() {
+  const t = useTranslations('home');
+  const locale = useLocale();
   const statsRef = useRef(null);
   const statsInView = useInView(statsRef, { once: true, margin: '-80px' });
 
@@ -65,34 +55,33 @@ export default function HomePage() {
       <section className="mx-auto grid max-w-6xl gap-12 px-4 py-16 lg:grid-cols-2 lg:py-24">
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
           <span className="inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700">
-            Rural healthcare · Bangladesh
+            {t('eyebrow')}
           </span>
           <h1 className="mt-4 text-4xl font-semibold leading-tight text-slate-900 lg:text-5xl">
-            Healthcare for every village.
+            {t('title')}
           </h1>
           <p className="mt-4 text-lg leading-relaxed text-slate-500">
-            Connect with qualified doctors from anywhere in Bangladesh. No travel,
-            no long queues — just a conversation.
+            {t('subtitle')}
           </p>
           <div className="mt-7 flex flex-wrap gap-3">
             <Link
               href="/doctors"
               className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-700"
             >
-              Find a doctor <ArrowRight className="h-4 w-4" aria-hidden />
+              {t('findDoctor')} <ArrowRight className="h-4 w-4" aria-hidden />
             </Link>
             <Link
               href="/register"
               className="rounded-lg border border-blue-600 px-5 py-3 text-sm font-medium text-blue-600 transition-colors hover:bg-blue-50"
             >
-              Register as patient
+              {t('registerAsPatient')}
             </Link>
           </div>
           <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-xs text-slate-500">
-            {['Free for rural patients', 'Licensed doctors', 'Works on 2G'].map((t) => (
-              <span key={t} className="inline-flex items-center gap-1.5">
+            {ASSURANCE_KEYS.map((key) => (
+              <span key={key} className="inline-flex items-center gap-1.5">
                 <Check className="h-3.5 w-3.5 text-green-600" aria-hidden />
-                {t}
+                {t(`assurance.${key}`)}
               </span>
             ))}
           </div>
@@ -109,29 +98,29 @@ export default function HomePage() {
               SM
             </div>
             <div>
-              <p className="text-sm font-medium text-slate-900">Dr. Sarah Miller</p>
+              <p className="text-sm font-medium text-slate-900">{t('demo.doctorName')}</p>
               <p className="flex items-center gap-1.5 text-xs text-green-600">
-                <span className="h-1.5 w-1.5 rounded-full bg-green-600" /> Online
+                <span className="h-1.5 w-1.5 rounded-full bg-green-600" /> {t('demo.online')}
               </p>
             </div>
           </div>
           <div className="space-y-3">
             <div className="max-w-[80%] rounded-xl rounded-bl-sm border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-700">
-              Hello Rahim, how are you feeling today?
+              {t('demo.msg1')}
             </div>
             <div className="ml-auto max-w-[80%] rounded-xl rounded-br-sm bg-blue-600 px-3.5 py-2.5 text-sm text-white">
-              Fever since two days, and a headache.
+              {t('demo.msg2')}
             </div>
             <div className="max-w-[80%] rounded-xl rounded-bl-sm border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-700">
-              I can see your vitals from the health worker. Let me review them.
+              {t('demo.msg3')}
             </div>
           </div>
           <div className="mt-4 grid grid-cols-2 gap-2 border-t border-slate-100 pt-4">
             <div className="rounded-lg bg-green-50 px-3 py-2 text-xs font-medium text-green-700">
-              Prescription ready
+              {t('demo.prescriptionReady')}
             </div>
             <div className="rounded-lg bg-purple-50 px-3 py-2 text-xs font-medium text-purple-700">
-              Follow-up booked
+              {t('demo.followUpBooked')}
             </div>
           </div>
         </motion.div>
@@ -140,16 +129,17 @@ export default function HomePage() {
       <section ref={statsRef} className="bg-blue-600">
         <div className="mx-auto grid max-w-6xl grid-cols-2 gap-6 px-4 py-10 lg:grid-cols-4">
           {STATS.map((stat, i) => (
-            <div key={stat.label} className="text-center">
+            <div key={stat.key} className="text-center">
               <p className="text-3xl font-semibold text-white">
                 <CountingNumber
                   target={stat.target}
                   autoStart={statsInView}
+                  locale={locale}
                   transition={{ duration: 1.8, ease: 'easeOut', delay: i * 0.1 }}
                 />
                 {stat.suffix}
               </p>
-              <p className="mt-1 text-sm text-blue-100">{stat.label}</p>
+              <p className="mt-1 text-sm text-blue-100">{t(`stats.${stat.key}Label`)}</p>
             </div>
           ))}
         </div>
@@ -157,23 +147,27 @@ export default function HomePage() {
 
       <section className="mx-auto max-w-6xl px-4 py-20">
         <motion.div {...fadeUp} className="mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-semibold text-slate-900">How Medbridge works</h2>
-          <p className="mt-3 text-slate-500">
-            Three steps from your village to a qualified doctor.
-          </p>
+          <h2 className="text-3xl font-semibold text-slate-900">{t('stepsTitle')}</h2>
+          <p className="mt-3 text-slate-500">{t('stepsSubtitle')}</p>
         </motion.div>
 
         <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {STEPS.map((s, i) => (
+          {STEP_KEYS.map((key, i) => (
             <motion.div
-              key={s.n}
+              key={key}
               {...fadeUp}
               transition={{ duration: 0.4, delay: i * 0.1 }}
               className="rounded-xl border border-slate-200 bg-white p-6"
             >
-              <span className="text-2xl font-semibold text-blue-200">{s.n}</span>
-              <h3 className="mt-3 text-base font-semibold text-slate-900">{s.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-slate-500">{s.body}</p>
+              <span className="text-2xl font-semibold text-blue-200">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <h3 className="mt-3 text-base font-semibold text-slate-900">
+                {t(`steps.${key}.title`)}
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate-500">
+                {t(`steps.${key}.body`)}
+              </p>
             </motion.div>
           ))}
         </div>
@@ -182,18 +176,14 @@ export default function HomePage() {
       <section className="border-y border-slate-200 bg-slate-50">
         <div className="mx-auto max-w-6xl px-4 py-20">
           <motion.div {...fadeUp} className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-semibold text-slate-900">
-              Everything you need, nothing you don&apos;t
-            </h2>
-            <p className="mt-3 text-slate-500">
-              Built for low-bandwidth rural connections.
-            </p>
+            <h2 className="text-3xl font-semibold text-slate-900">{t('featuresTitle')}</h2>
+            <p className="mt-3 text-slate-500">{t('featuresSubtitle')}</p>
           </motion.div>
 
           <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {FEATURES.map((f, i) => (
               <motion.div
-                key={f.title}
+                key={f.key}
                 {...fadeUp}
                 transition={{ duration: 0.35, delay: i * 0.05 }}
                 className="rounded-xl border border-slate-200 bg-white p-5"
@@ -201,8 +191,12 @@ export default function HomePage() {
                 <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50">
                   <f.Icon className="h-[18px] w-[18px] text-blue-600" aria-hidden />
                 </div>
-                <h3 className="text-sm font-semibold text-slate-900">{f.title}</h3>
-                <p className="mt-1.5 text-sm text-slate-500">{f.body}</p>
+                <h3 className="text-sm font-semibold text-slate-900">
+                  {t(`features.${f.key}.title`)}
+                </h3>
+                <p className="mt-1.5 text-sm text-slate-500">
+                  {t(`features.${f.key}.body`)}
+                </p>
               </motion.div>
             ))}
           </div>
@@ -214,24 +208,20 @@ export default function HomePage() {
           {...fadeUp}
           className="rounded-2xl bg-blue-600 px-8 py-14 text-center"
         >
-          <h2 className="text-2xl font-semibold text-white lg:text-3xl">
-            Ready to consult a doctor?
-          </h2>
-          <p className="mx-auto mt-3 max-w-lg text-blue-100">
-            Registration takes under two minutes and is free for rural patients.
-          </p>
+          <h2 className="text-2xl font-semibold text-white lg:text-3xl">{t('ctaTitle')}</h2>
+          <p className="mx-auto mt-3 max-w-lg text-blue-100">{t('ctaBody')}</p>
           <div className="mt-7 flex flex-wrap justify-center gap-3">
             <Link
               href="/register"
               className="rounded-lg bg-white px-5 py-3 text-sm font-medium text-blue-700 transition-colors hover:bg-blue-50"
             >
-              Register as patient
+              {t('registerAsPatient')}
             </Link>
             <Link
               href="/doctors"
               className="rounded-lg border border-white/60 px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-500"
             >
-              Browse doctors
+              {t('browseDoctors')}
             </Link>
           </div>
         </motion.div>

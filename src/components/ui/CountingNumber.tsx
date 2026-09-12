@@ -29,6 +29,8 @@ export type CountingNumberProps = {
   onStart?: () => void;
   onComplete?: () => void;
   autoStart?: boolean;
+  /** BCP-47 locale for digit formatting - e.g. 'bn' renders Bengali numerals. */
+  locale?: string;
 };
 
 export const CountingNumber = forwardRef<CountingNumberRef, CountingNumberProps>(
@@ -41,12 +43,15 @@ export const CountingNumber = forwardRef<CountingNumberRef, CountingNumberProps>
       onStart,
       onComplete,
       autoStart = true,
+      locale,
       ...props
     },
     ref,
   ) => {
     const count = useMotionValue(from);
-    const rounded = useTransform(count, (latest) => Math.round(latest).toLocaleString());
+    const rounded = useTransform(count, (latest) =>
+      Math.round(latest).toLocaleString(locale),
+    );
     const controlsRef = useRef<AnimationPlaybackControls | null>(null);
 
     const startAnimation = useCallback(() => {
