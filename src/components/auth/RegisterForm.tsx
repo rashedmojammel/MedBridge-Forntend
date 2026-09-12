@@ -138,6 +138,7 @@ export default function RegisterForm() {
               placeholder="Guardian name"
               error={errors.emergencyContactName?.message}
               {...register('emergencyContactName')}
+              
             />
             <Input
               label="Contact phone"

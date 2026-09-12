@@ -8,7 +8,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         <Link href="/" className="inline-flex items-center gap-2 font-semibold text-blue-600">
           <HeartPulse className="h-5 w-5" aria-hidden />
           Medbridge
-          
+           
         </Link>
       </div>
       <main className="flex flex-1 items-center justify-center px-4 pb-12">{children}</main>

@@ -287,7 +287,7 @@
 //                 </div>
 //               </section>
 //             </form>
-//           </div>
+//           </div> 
 
 
 //           {/* Fixed bottom bar: submit + login link, always visible regardless of scroll */}

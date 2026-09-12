@@ -19,7 +19,7 @@ type FormValues = { newPassword: string; confirm: string };
 
 const CARD = 'w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-8 shadow-sm';
 
-
+ 
 function ResetPasswordForm() {
   const token = useSearchParams().get('token') ?? '';
   const reset = useResetPassword();

@@ -8,12 +8,8 @@ import { AuthSwitch, type AuthSwitchValue } from '@/components/ui/AuthSwitch';
 import LoginForm from '@/components/auth/LoginForm';
 import RegisterForm from '@/components/auth/RegisterForm';
 
-/**
- * Single auth card shown on both /login and /register. Mode is derived from
- * the current route, so the URL stays shareable/bookmarkable and the browser
- * back button works, while the AuthSwitch tab lets the user flip between the
- * two forms without a full page reload.
- */
+
+
 export default function AuthCard() {
   const pathname = usePathname();
   const router = useRouter();
