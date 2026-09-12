@@ -56,7 +56,6 @@ export default function ChwDirectoryPage() {
                 transition={{ duration: 0.3, delay: i * 0.04 }}
               >
                 <div className="group relative flex aspect-[3/4] w-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-slate-100 transition-all hover:border-blue-300 hover:shadow-lg">
-                  {/* Full-bleed photo, falls back to an icon tile when no image */}
                   {c.profileImage ? (
                     <img
                       src={c.profileImage}
@@ -69,7 +68,6 @@ export default function ChwDirectoryPage() {
                     </div>
                   )}
 
-                  {/* Scrim so text stays legible over any photo */}
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
 
                   <Badge tone="purple" className="relative z-10 m-3 self-start shadow-sm">

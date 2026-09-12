@@ -33,6 +33,7 @@ export default function ChwPatientsPage() {
     tc('registered'),
     tc('actions'),
   ];
+  
 
   return (
     <>
