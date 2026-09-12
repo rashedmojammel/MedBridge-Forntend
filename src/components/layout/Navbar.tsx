@@ -44,7 +44,7 @@ export default function Navbar() {
             alt="Medbridge"
             width={20}
             height={20}
-            className="h-5 w-5"
+            className="h-16 w-16"
             priority
           />
           <span>Medbridge</span>
