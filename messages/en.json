@@ -1127,5 +1127,13 @@
     "linkAlternative": "Link an alternative",
     "created": "{name} added to the catalogue",
     "createFailed": "Could not add medicine"
-  }
+  },
+  "notFound": {
+  "title": "পেজটি খুঁজে পাওয়া যায়নি",
+  "body": "আপনি যে পেজটি খুঁজছেন সেটি নেই অথবা সরিয়ে ফেলা হয়েছে।",
+  "backHome": "হোমে ফিরে যান",
+  "browseDoctors": "ডাক্তার দেখুন",
+  "helpText": "এখনও সমস্যা হচ্ছে?",
+  "contactLink": "যোগাযোগ করুন"
+}
 }

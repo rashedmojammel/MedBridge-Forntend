@@ -1125,5 +1125,13 @@
     "linkAlternative": "একটি বিকল্প যোগ করুন",
     "created": "{name} ক্যাটালগে যোগ হয়েছে",
     "createFailed": "ওষুধ যোগ করা গেল না"
-  }
+  },
+  "notFound": {
+  "title": "Page not found",
+  "body": "The page you're looking for doesn't exist or may have been moved.",
+  "backHome": "Back to home",
+  "browseDoctors": "Browse doctors",
+  "helpText": "Still stuck?",
+  "contactLink": "Contact us"
+}
 }
