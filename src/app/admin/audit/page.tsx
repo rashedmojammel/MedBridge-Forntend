@@ -29,11 +29,6 @@ import { useAuditLog } from '@/hooks/useAudit';
 import { formatDateTime, timeAgo } from '@/lib/utils';
 import type { AuditAction, UserRole } from '@/types';
 
-/**
- * The audit trail. Only three things are written to it today - password
- * changes, dispensing, and referrals - so the page names them rather than
- * letting an admin assume every action in the system is recorded here.
- */
 
 const ACTIONS: {
   value: AuditAction;
@@ -52,7 +47,6 @@ const ACTIONS: {
 
 const actionMeta = (a: AuditAction) => ACTIONS.find((x) => x.value === a);
 
-/** The resources anything is actually recorded against. */
 const RESOURCES: { value: string; label: string; icon: typeof Send }[] = [
   { value: 'auth', label: 'Passwords', icon: KeyRound },
   { value: 'prescriptions', label: 'Dispensing', icon: PackageCheck },
@@ -73,7 +67,6 @@ export default function AdminAuditPage() {
     resource,
     action,
     from,
-    // a bare date lands on midnight server-side, which would drop the day itself
     to: to ? `${to}T23:59:59` : '',
     page,
     limit,
@@ -81,7 +74,6 @@ export default function AdminAuditPage() {
 
   const filtered = Boolean(resource || action || from || to);
 
-  // any filter change invalidates the page number
   const change = (fn: () => void) => {
     fn();
     setPage(1);
