@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import PageHeader from '@/components/shared/PageHeader';
 import MedicineCatalogue from '@/components/shared/MedicineCatalogue';
-
+ 
 export default function AdminMedicinesPage() {
   const router = useRouter();
 
