@@ -2,9 +2,10 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
-import { HeartPulse, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import LanguageToggle from '@/components/LanguageToggle';
 import { cn } from '@/lib/utils';
@@ -29,9 +30,16 @@ export default function PublicNavbar() {
     <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2 text-lg font-semibold text-blue-600">
-          <HeartPulse className="h-5 w-5" aria-hidden />
-          Medbridge
-        </Link>
+  <Image
+    src="/medbridge-icon.png"
+    alt="Medbridge"
+    width={32}
+    height={32}
+    className="h-16 w-16"
+    priority
+  />
+  Medbridge
+</Link>
 
         <nav className="hidden items-center gap-1 md:flex">
           {LINKS.map((l) => {
