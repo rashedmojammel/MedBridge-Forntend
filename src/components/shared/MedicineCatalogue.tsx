@@ -27,14 +27,6 @@ import { apiError } from '@/lib/api';
 import type { Medicine, StockAction } from '@/types';
 
 export const DOSAGE_FORMS = ['TABLET', 'SYRUP', 'INJECTION', 'DROPS'];
-
-/**
- * Value posted to the API, key for the label.
- *
- * The reason is free text on an inventory adjustment that gets read back as an
- * audit trail, so the stored string stays English while the pharmacist picks
- * from a list in their own language.
- */
 const STOCK_REASONS = [
   { value: 'Restock delivery', key: 'restock' },
   { value: 'Expired', key: 'expired' },
@@ -42,13 +34,6 @@ const STOCK_REASONS = [
   { value: 'Stock correction', key: 'correction' },
 ] as const;
 
-/**
- * Shared catalogue table for the admin and pharmacist medicine screens.
- *
- * There is no list-all endpoint - the catalogue is too big for one - so the
- * default view is the low-stock list, which is the one the pharmacy actually
- * needs to act on, and everything else is reached by searching.
- */
 export default function MedicineCatalogue({
   canAdjustStock = false,
   onAdd,
@@ -88,8 +73,6 @@ export default function MedicineCatalogue({
   const [action, setAction] = useState<StockAction>('ADD');
   const [quantity, setQuantity] = useState('');
   const [reason, setReason] = useState<string>(STOCK_REASONS[0].value);
-
-  // low-stock rows come back as inventory records, so lift the medicine out
   const rows: Medicine[] = searching
     ? (results ?? [])
     : (lowStock ?? [])
@@ -366,7 +349,6 @@ export default function MedicineCatalogue({
               value={form.dosageForm}
               onChange={(e) => setForm((prev) => ({ ...prev, dosageForm: e.target.value }))}
             >
-              {/* the value is what the API stores; only the label is translated */}
               {DOSAGE_FORMS.map((d) => (
                 <option key={d} value={d}>
                   {tf.has(d) ? tf(d) : d}
