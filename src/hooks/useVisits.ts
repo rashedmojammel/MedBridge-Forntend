@@ -12,7 +12,6 @@ export function useVisits(params?: { from?: string; to?: string; patientId?: num
   });
 }
 
-/** Coverage summary for the signed-in CHW: outcomes, villages, travel time. */
 export function useVisitStats(days?: number) {
   return useQuery({
     queryKey: ['field-visits', 'stats', days ?? 30],
