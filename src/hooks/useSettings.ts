@@ -12,10 +12,6 @@ export function usePublicSettings() {
   });
 }
 
-/**
- * Clinical parameters, not constants. Anything that colours a vital sign must
- * read them from here so an admin can retune triage without a redeploy.
- */
 export function useTriageThresholds() {
   return useQuery({
     queryKey: ['settings', 'triage-thresholds'],
