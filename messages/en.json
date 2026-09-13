@@ -1153,5 +1153,13 @@
     "linkAlternative": "Link an alternative",
     "created": "{name} added to the catalogue",
     "createFailed": "Could not add medicine"
-  }
+  },
+  "notFound": {
+  "title": "Page not found",
+  "body": "The page you're looking for doesn't exist or may have been moved.",
+  "backHome": "Back home",
+  "browseDoctors": "Browse doctors",
+  "helpText": "Need help?",
+  "contactLink": "Contact us"
+}
 }
