@@ -16,7 +16,7 @@ import { getTranslations } from 'next-intl/server';
 import { localizeDigits } from '@/lib/utils';
 import type { Locale } from '@/i18n/config';
 
-//
+
 
 export async function generateMetadata() {
   const t = await getTranslations('howItWorks');

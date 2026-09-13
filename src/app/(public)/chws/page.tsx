@@ -12,6 +12,7 @@ import { ListSkeleton } from '@/components/ui/Skeleton';
 import { usePublicChws } from '@/hooks/useUsers';
 import { useDebounce } from '@/hooks/useDebounce';
 
+
 const SKILLS = ['registration', 'triage', 'scheduling'] as const;
 
 export default function ChwDirectoryPage() {
@@ -20,6 +21,7 @@ export default function ChwDirectoryPage() {
   const { data: chws, isLoading } = usePublicChws(debounced);
   const t = useTranslations('chwsPage');
   const tr = useTranslations('enums.role');
+
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-14">
