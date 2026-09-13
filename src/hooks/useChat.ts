@@ -4,11 +4,6 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { getSocket } from '@/lib/socket';
 import type { ChatMessage } from '@/types';
 
-/**
- * Wires a consultation page to the backend's /chat gateway.
- * Seed it with the transcript from GET /consultations/:id, then this
- * hook appends anything that arrives live.
- */
 export function useChat(consultationId?: number, initial: ChatMessage[] = []) {
   const [messages, setMessages] = useState<ChatMessage[]>(initial);
   const [connected, setConnected] = useState(false);

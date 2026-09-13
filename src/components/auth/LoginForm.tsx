@@ -25,6 +25,7 @@ const DEMO = [
   { label: 'Doctor', email: 'doctor1@medbridge.com' },
   { label: 'CHW', email: 'chw1@medbridge.com' },
   { label: 'Pharmacist', email: 'pharmacist1@medbridge.com' },
+  { label: 'Patient', email: 'patient1@medbridge.com' },
 ];
 
 export default function LoginForm() {
