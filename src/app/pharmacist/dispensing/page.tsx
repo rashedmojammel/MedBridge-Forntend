@@ -16,13 +16,7 @@ import { useDispensingQueue } from '@/hooks/useDispensing';
 import { formatDate, timeAgo } from '@/lib/utils';
 import type { Prescription, PrescriptionItem } from '@/types';
 
-/**
- * The pharmacy counter queue: active prescriptions still owing medicine,
- * oldest first. Only a pharmacist can actually hand anything over, so this is
- * the one screen where stock and prescriptions meet.
- */
 
-/** Waiting longer than this and someone has probably given up and gone home. */
 const STALE_DAYS = 3;
 
 function daysWaiting(iso: string): number {
@@ -49,6 +43,7 @@ export default function DispensingQueuePage() {
           .filter(Boolean)
           .some((field) => field!.toLowerCase().includes(term)),
   );
+
 
   const counts = useMemo(() => {
     const rows = queue ?? [];
@@ -79,6 +74,7 @@ export default function DispensingQueuePage() {
         </Alert>
       )}
 
+
       <div className="mb-4 grid gap-3 sm:grid-cols-3">
         <Card>
           <p className="text-2xl font-semibold text-slate-900">{counts.total}</p>
@@ -94,6 +90,7 @@ export default function DispensingQueuePage() {
         </Card>
       </div>
 
+
       <div className="mb-4">
         <SearchBar
           value={search}
@@ -101,6 +98,7 @@ export default function DispensingQueuePage() {
           placeholder="Search by patient, MRN, doctor, or prescription number..."
         />
       </div>
+
 
       {isLoading ? (
         <ListSkeleton rows={4} />
@@ -124,6 +122,7 @@ export default function DispensingQueuePage() {
         </div>
       )}
 
+
       {(queue ?? []).length >= 100 && (
         <p className="mt-4 text-xs text-slate-400">
           Showing the 100 oldest prescriptions. Clear some to see the rest.
@@ -133,10 +132,12 @@ export default function DispensingQueuePage() {
   );
 }
 
+
 function QueueRow({ rx }: { rx: Prescription }) {
   const waiting = daysWaiting(rx.issuedAt);
   const items = rx.items ?? [];
   const out = items.filter((i) => shortfall(i) === 'out');
+
 
   return (
     <Card>
@@ -163,6 +164,7 @@ function QueueRow({ rx }: { rx: Prescription }) {
           <StatusBadge status={rx.dispenseStatus} />
         </div>
       </div>
+
 
       <ul className="mt-3 space-y-1.5">
         {items.map((item) => {
@@ -200,6 +202,7 @@ function QueueRow({ rx }: { rx: Prescription }) {
         })}
       </ul>
 
+
       {rx.doctorNotes && (
         <p className="mt-3 rounded-lg bg-slate-50 px-3 py-2 text-xs text-slate-600">
           {rx.doctorNotes}
@@ -214,6 +217,7 @@ function QueueRow({ rx }: { rx: Prescription }) {
             : `${out.length} of these medicines are out of stock.`}
         </p>
       )}
+
 
       <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-slate-100 pt-3">
         <p className="mr-auto flex items-center gap-1.5 text-xs text-slate-400">

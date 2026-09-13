@@ -76,9 +76,11 @@ export default function MedicineForm({ backHref }: { backHref: string }) {
     );
   };
 
+  
   return (
     <form onSubmit={submit}>
       <PageHeader title={t('addTitle')} subtitle={t('addSubtitle')} />
+
 
       <div className="grid gap-4 lg:grid-cols-3">
         <div className="space-y-4 lg:col-span-2">
@@ -105,7 +107,7 @@ export default function MedicineForm({ backHref }: { backHref: string }) {
                 value={form.dosageForm}
                 onChange={(e) => set('dosageForm', e.target.value)}
               >
-                {/* the value is what the API stores; only the label is translated */}
+
                 {DOSAGE_FORMS.map((d) => (
                   <option key={d} value={d}>
                     {tf.has(d) ? tf(d) : d}
@@ -134,6 +136,7 @@ export default function MedicineForm({ backHref }: { backHref: string }) {
             </div>
           </Card>
 
+
           <Card>
             <CardHeader title={t('openingInventory')} />
             <div className="grid gap-4 sm:grid-cols-2">
@@ -157,6 +160,7 @@ export default function MedicineForm({ backHref }: { backHref: string }) {
               {t('thresholdNote')}
             </Alert>
           </Card>
+
 
           <Card>
             <CardHeader
@@ -204,6 +208,7 @@ export default function MedicineForm({ backHref }: { backHref: string }) {
           </Card>
         </div>
 
+
         <div className="space-y-4">
           <Card>
             <CardHeader title={t('availability')} />
@@ -224,6 +229,7 @@ export default function MedicineForm({ backHref }: { backHref: string }) {
               </span>
             </label>
           </Card>
+
 
           <Card>
             <Button type="submit" fullWidth loading={create.isPending}>
