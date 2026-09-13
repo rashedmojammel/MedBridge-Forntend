@@ -6,7 +6,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
     <div className="flex min-h-screen flex-col bg-slate-50">
       <div className="p-5">
         <Link href="/" className="inline-flex items-center gap-2 font-semibold text-blue-600">
-          <Image src="/medbridge-icon.png" alt="Medbridge" width={20} height={20} />
+          <Image src="/medbridge-icon.png" alt="Medbridge" width={30} height={30} />
           Medbridge
         </Link>
       </div>
