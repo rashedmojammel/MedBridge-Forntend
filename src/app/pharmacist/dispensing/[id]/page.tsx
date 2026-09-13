@@ -28,11 +28,6 @@ import { apiError } from '@/lib/api';
 import { formatDate, formatDateTime } from '@/lib/utils';
 import type { Prescription, PrescriptionItem } from '@/types';
 
-/**
- * One prescription at the counter. A pharmacist cannot read
- * GET /prescriptions/:id at all, so everything here comes from the dispense
- * endpoint plus whatever the queue already told us about the patient.
- */
 
 export default function DispensePrescriptionPage() {
   const { id } = useParams<{ id: string }>();
@@ -42,8 +37,8 @@ export default function DispensePrescriptionPage() {
   const { data: queue } = useDispensingQueue();
   const dispense = useDispense();
 
-  // the header details only exist in the queue payload, and the prescription
-  // drops out of the queue the moment it is fully dispensed - so hold on to it
+
+
   const [prescription, setPrescription] = useState<Prescription | null>(null);
   useEffect(() => {
     const found = (queue ?? []).find((rx) => String(rx.id) === String(id));
@@ -105,6 +100,7 @@ export default function DispensePrescriptionPage() {
     );
   };
 
+
   if (isLoading) return <ListSkeleton rows={5} />;
 
   if (!history) {
@@ -152,6 +148,7 @@ export default function DispensePrescriptionPage() {
           the patient on this prescription.
         </Alert>
       )}
+
 
       <div className="grid gap-4 lg:grid-cols-3">
         <div className="space-y-4 lg:col-span-2">
@@ -416,6 +413,7 @@ function OutstandingRow({
           />
         </div>
       </div>
+
 
       {outOfStock && (
         <p className="mt-2 flex items-start gap-1.5 text-xs text-red-600">

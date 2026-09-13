@@ -197,6 +197,7 @@ export default function InventoryPage() {
             <option>Stock correction</option>
           </Select>
 
+
           <div className="rounded-lg border border-blue-200 bg-blue-50 px-3 py-2.5 text-sm text-blue-800">
             New stock level:{" "}
             <span className="font-semibold">{preview} units</span>
