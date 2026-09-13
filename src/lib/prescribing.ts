@@ -1,7 +1,3 @@
-/**
- * The wording used on prescriptions and templates. Kept in one place so a
- * template written on one screen reads identically on the other.
- */
 
 export const FREQUENCIES = [
   'Once daily',

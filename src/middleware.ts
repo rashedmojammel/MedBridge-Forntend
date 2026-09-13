@@ -39,7 +39,6 @@ export function middleware(request: NextRequest) {
     (p) => pathname === p || (p !== '/' && pathname.startsWith(p)),
   );
 
-  // Already logged in and sitting on login/register -> send to dashboard
   if (token && userRaw && (pathname === '/login' || pathname === '/register')) {
     try {
       const user = JSON.parse(userRaw);
