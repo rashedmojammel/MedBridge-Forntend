@@ -8,17 +8,6 @@ import { setLocale } from '@/i18n/locale';
 import { LOCALE_SHORT, locales, type Locale } from '@/i18n/config';
 import { cn } from '@/lib/utils';
 
-/**
- * Switches the reading language.
- *
- * The choice is written to a cookie by a server action, then `router.refresh()`
- * re-renders from the server - which is what updates `<html lang>` in the root
- * layout as well as the copy, since both are resolved there.
- *
- * Only rendered where Bangla actually exists (public pages, and the PATIENT and
- * CHW shells). Showing it to a doctor would offer a switch that does nothing:
- * src/i18n/request.ts pins those roles to English.
- */
 export default function LanguageToggle({ className }: { className?: string }) {
   const active = useLocale() as Locale;
   const router = useRouter();
@@ -49,8 +38,6 @@ export default function LanguageToggle({ className }: { className?: string }) {
             type="button"
             onClick={() => choose(code)}
             aria-pressed={on}
-            // Each label is in its own language, so a reader who cannot read the
-            // current one can still find the way out.
             lang={code}
             className={cn(
               'rounded-md px-2 py-1 text-xs font-semibold transition-colors',

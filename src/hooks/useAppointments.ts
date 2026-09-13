@@ -36,7 +36,7 @@ export function useUpdateAppointment() {
   });
 }
 
-/** Appointments are cancelled with a reason, never deleted. */
+
 export function useCancelAppointment() {
   const qc = useQueryClient();
   return useMutation({
