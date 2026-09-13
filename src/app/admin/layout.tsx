@@ -10,8 +10,7 @@ import {
 } from 'lucide-react';
 import RoleShell from '@/components/layout/RoleShell';
 
-// adding a user is reachable from the users screen, so the mobile five go to
-// the things only an admin can do at all
+
 const NAV = [
   { href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/admin/users', label: 'Users', icon: Users },

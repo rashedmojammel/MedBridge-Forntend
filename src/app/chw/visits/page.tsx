@@ -41,12 +41,7 @@ import { useFormat } from '@/hooks/useFormat';
 import { apiError } from '@/lib/api';
 import type { FieldVisit, Patient, VisitOutcome } from '@/types';
 
-/**
- * The CHW's own round: who was visited, what came of it, and how much of the
- * day went on travel. The list endpoint is CHW and admin only.
- */
 
-/** Value and tone only - the label comes from `enums.visitOutcome`. */
 const OUTCOMES: { value: VisitOutcome; tone: 'blue' | 'green' | 'orange' | 'purple' | 'gray' }[] = [
   { value: 'ROUTINE_CHECK', tone: 'blue' },
   { value: 'TRIAGE_DONE', tone: 'green' },
@@ -59,12 +54,7 @@ const outcomeTone = (o: VisitOutcome) => OUTCOMES.find((x) => x.value === o)?.to
 
 const RANGES = [7, 30, 90];
 
-/**
- * `<input type="date">` and the from/to filters both want YYYY-MM-DD.
- *
- * Built from the local date parts by hand rather than through `Intl`: the result
- * is a query parameter, so it stays ASCII whatever the display locale.
- */
+
 function isoDate(d: Date): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(
     d.getDate(),
@@ -84,7 +74,6 @@ function VisitsLog() {
   const [logging, setLogging] = useState(false);
   const [target, setTarget] = useState<FieldVisit | null>(null);
 
-  // a patient filter arrives from that patient's record
   const patientFilter = patientIdParam ? Number(patientIdParam) : undefined;
   const { data: prefilled } = usePatient(patientIdParam ?? undefined);
 
@@ -101,7 +90,6 @@ function VisitsLog() {
   const { data: stats } = useVisitStats(days);
   const remove = useDeleteVisit();
 
-  // group by day so a round reads as a round, not a flat list
   const byDay = useMemo(() => {
     const groups = new Map<string, FieldVisit[]>();
     for (const v of visits ?? []) {
@@ -389,7 +377,6 @@ function LogVisit({
     setVillage((v) => v || prefilled.village || '');
   }, [prefilled]);
 
-  // picking the patient fills the village in from their record
   const choose = (p: Patient) => {
     setPatient(p);
     if (p.village) setVillage(p.village);
@@ -404,7 +391,6 @@ function LogVisit({
       return toast(t('travelWhole'), 'error');
     }
 
-    // built field by field - the API rejects unknown properties
     create.mutate(
       {
         patientId: patient.id,
@@ -525,7 +511,6 @@ function LogVisit({
 }
 
 export default function ChwVisitsPage() {
-  // reading ?patientId needs a suspense boundary to prerender
   return (
     <Suspense fallback={<ListSkeleton rows={5} />}>
       <VisitsLog />

@@ -26,10 +26,7 @@ export default function Navbar() {
   const f = useFormat();
 
   const unread = data?.unreadCount ?? 0;
-  // every role has its own /<role>/account page under its own layout
   const accountHref = dashboardFor(user?.role).replace('/dashboard', '/account');
-  // Doctors, pharmacists and admins are pinned to English server-side, so the
-  // toggle would be a control that visibly does nothing for them.
   const canSwitchLanguage = !!user?.role && ROLES_WITH_BANGLA.has(user.role);
 
   return (
@@ -109,8 +106,7 @@ export default function Navbar() {
                       <UserIcon className="h-4 w-4 text-slate-400" aria-hidden />
                       {t('myAccount')}
                     </Link>
-                    {/* On phones the toggle is hidden from the header bar, which
-                        is already crowded, so it lives here instead. */}
+                    {}
                     {canSwitchLanguage && (
                       <div className="flex items-center justify-between px-3 py-2 sm:hidden">
                         <span className="text-sm text-slate-700">{t('language')}</span>

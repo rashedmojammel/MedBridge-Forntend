@@ -27,7 +27,6 @@ import { apiError } from '@/lib/api';
 import { formatDate } from '@/lib/utils';
 import type { User } from '@/types';
 
-/** GET /users/:id answers with the account and its role-specific profile row. */
 interface UserDetail {
   user: User;
   profile: {
@@ -504,4 +503,5 @@ function EditUser({
       </div>
     </Modal>
   );
+  
 }

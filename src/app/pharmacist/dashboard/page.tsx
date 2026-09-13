@@ -1,22 +1,28 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { AlertTriangle, Boxes, PackageCheck, PackageX, Pill } from 'lucide-react';
-import PageHeader from '@/components/shared/PageHeader';
-import StatCard from '@/components/shared/StatCard';
-import Card, { CardHeader } from '@/components/ui/Card';
-import Button from '@/components/ui/Button';
-import Alert from '@/components/ui/Alert';
-import ProgressBar from '@/components/ui/ProgressBar';
-import EmptyState from '@/components/ui/EmptyState';
-import { ListSkeleton, StatCardSkeleton } from '@/components/ui/Skeleton';
-import { useLowStock } from '@/hooks/useMedicines';
-import { usePharmacistStats } from '@/hooks/useStats';
-import { useCurrentUser } from '@/hooks/useAuth';
+import Link from "next/link";
+import {
+  AlertTriangle,
+  Boxes,
+  PackageCheck,
+  PackageX,
+  Pill,
+} from "lucide-react";
+import PageHeader from "@/components/shared/PageHeader";
+import StatCard from "@/components/shared/StatCard";
+import Card, { CardHeader } from "@/components/ui/Card";
+import Button from "@/components/ui/Button";
+import Alert from "@/components/ui/Alert";
+import ProgressBar from "@/components/ui/ProgressBar";
+import EmptyState from "@/components/ui/EmptyState";
+import { ListSkeleton, StatCardSkeleton } from "@/components/ui/Skeleton";
+import { useLowStock } from "@/hooks/useMedicines";
+import { usePharmacistStats } from "@/hooks/useStats";
+import { useCurrentUser } from "@/hooks/useAuth";
 
 export default function PharmacistDashboardPage() {
   const user = useCurrentUser();
-  // counts come from /stats; the low-stock list is the one thing worth showing in full
+
   const { data: stats, isLoading: statsLoading } = usePharmacistStats();
   const { data: lowStock, isLoading } = useLowStock();
 
@@ -26,7 +32,7 @@ export default function PharmacistDashboardPage() {
   return (
     <>
       <PageHeader
-        title={`Welcome, ${user?.fullName?.split(' ')[0] ?? 'there'}`}
+        title={`Welcome, ${user?.fullName?.split(" ")[0] ?? "there"}`}
         subtitle="The dispensing queue, the catalogue, and what needs restocking."
         action={
           <Link href="/pharmacist/dispensing">
@@ -38,14 +44,17 @@ export default function PharmacistDashboardPage() {
         }
       />
 
+
       {!statsLoading && outOfStock > 0 && (
         <Alert tone="danger" className="mb-4" title="Medicines at zero">
           {outOfStock === 1
-            ? 'One medicine has nothing on the shelf.'
-            : `${outOfStock} medicines have nothing on the shelf.`}{' '}
-          Anything prescribed against them cannot be handed over until stock is recorded.
+            ? "One medicine has nothing on the shelf."
+            : `${outOfStock} medicines have nothing on the shelf.`}{" "}
+          Anything prescribed against them cannot be handed over until stock is
+          recorded.
         </Alert>
       )}
+
 
       <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {statsLoading ? (
@@ -60,7 +69,10 @@ export default function PharmacistDashboardPage() {
               tone="blue"
               index={0}
               action={
-                <Link href="/pharmacist/dispensing" className="text-xs font-medium text-blue-600">
+                <Link
+                  href="/pharmacist/dispensing"
+                  className="text-xs font-medium text-blue-600"
+                >
                   Open queue
                 </Link>
               }
@@ -90,15 +102,20 @@ export default function PharmacistDashboardPage() {
         )}
       </div>
 
+
       <div className="grid gap-4 lg:grid-cols-3">
         <Card className="lg:col-span-2">
           <CardHeader
             title="Low stock medicines"
             action={
-              <Link href="/pharmacist/inventory" className="text-xs font-medium text-blue-600">
+              <Link
+                href="/pharmacist/inventory"
+                className="text-xs font-medium text-blue-600"
+              >
                 Manage inventory
               </Link>
             }
+
           />
           {isLoading ? (
             <ListSkeleton rows={5} />
@@ -111,7 +128,10 @@ export default function PharmacistDashboardPage() {
           ) : (
             <div className="space-y-3">
               {lowStock.slice(0, 8).map((inv) => (
-                <div key={inv.id} className="rounded-lg border border-slate-200 p-3">
+                <div
+                  key={inv.id}
+                  className="rounded-lg border border-slate-200 p-3"
+                >
                   <div className="mb-2 flex items-center justify-between gap-3">
                     <div className="min-w-0">
                       <p className="truncate text-sm font-medium text-slate-900">
@@ -125,8 +145,8 @@ export default function PharmacistDashboardPage() {
                       <span
                         className={
                           inv.stockQty === 0
-                            ? 'text-xs font-semibold text-red-600'
-                            : 'text-xs font-semibold text-orange-600'
+                            ? "text-xs font-semibold text-red-600"
+                            : "text-xs font-semibold text-orange-600"
                         }
                       >
                         {inv.stockQty}/{inv.threshold}
@@ -143,13 +163,14 @@ export default function PharmacistDashboardPage() {
               ))}
               {lowStock.length > 8 && (
                 <p className="text-xs text-slate-500">
-                  {lowStock.length - 8} more below threshold. The inventory screen lists all of
-                  them.
+                  {lowStock.length - 8} more below threshold. The inventory
+                  screen lists all of them.
                 </p>
               )}
             </div>
           )}
         </Card>
+
 
         <div className="space-y-4">
           <Card>
@@ -157,32 +178,37 @@ export default function PharmacistDashboardPage() {
             <div className="flex items-baseline gap-2">
               <Boxes className="h-5 w-5 text-slate-400" aria-hidden />
               <span className="text-2xl font-semibold text-slate-900">
-                {statsLoading ? '—' : (stats?.unitsInStock ?? 0).toLocaleString()}
+                {statsLoading
+                  ? "—"
+                  : (stats?.unitsInStock ?? 0).toLocaleString()}
               </span>
               <span className="text-sm text-slate-500">units</span>
             </div>
             <p className="mt-2 text-xs text-slate-500">
-              Total units across every medicine with an inventory record. Medicines carry no
-              price, so there is no currency figure to report.
+              Total units across every medicine with an inventory record.
+              Medicines carry no price, so there is no currency figure to
+              report.
             </p>
           </Card>
+          
 
           <Card>
             <CardHeader title="How dispensing works" />
             <ul className="space-y-2 text-sm text-slate-600">
               <li className="flex gap-2">
                 <span className="text-slate-300">—</span>
-                Only a pharmacist can record a hand-over. Doctors and admins can read the
-                history but not add to it.
+                Only a pharmacist can record a hand-over. Doctors and admins can
+                read the history but not add to it.
               </li>
               <li className="flex gap-2">
                 <span className="text-slate-300">—</span>
-                Recording a dispense decrements stock in the same transaction. There is no
-                undo.
+                Recording a dispense decrements stock in the same transaction.
+                There is no undo.
               </li>
               <li className="flex gap-2">
                 <span className="text-slate-300">—</span>
-                Every dispense is written to the audit log with your name against it.
+                Every dispense is written to the audit log with your name
+                against it.
               </li>
             </ul>
           </Card>

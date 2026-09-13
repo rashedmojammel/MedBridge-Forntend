@@ -16,14 +16,12 @@ import { getTranslations } from 'next-intl/server';
 import { localizeDigits } from '@/lib/utils';
 import type { Locale } from '@/i18n/config';
 
-// `metadata` cannot be a static object any more: the title has to follow the
-// reader's language, and that is only known per request.
+
 export async function generateMetadata() {
   const t = await getTranslations('howItWorks');
   return { title: t('metaTitle'), description: t('metaDescription') };
 }
 
-// Icons and order live here; the words live in messages/*.json.
 const STEPS = [
   { icon: UserPlus, key: 'register' },
   { icon: Activity, key: 'vitals' },

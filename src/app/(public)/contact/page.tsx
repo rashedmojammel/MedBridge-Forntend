@@ -50,8 +50,7 @@ export default function ContactPage() {
         <div className="rounded-xl border border-slate-200 bg-white p-5">
           <Clock className="h-5 w-5 text-blue-600" aria-hidden />
           <h2 className="mt-3 text-sm font-semibold text-slate-900">{t('hoursTitle')}</h2>
-          {/* The opening hours carry their own digits per language, so the times
-              are not a mix of Latin numerals in a Bangla sentence. */}
+          
           <p className="mt-1 text-sm text-slate-700">{t('hoursValue')}</p>
           <p className="mt-1.5 text-xs text-slate-500">{t('hoursBody')}</p>
         </div>

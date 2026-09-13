@@ -40,7 +40,7 @@ export default function Badge({
   );
 }
 
-/** Maps any backend status string to the right colour. */
+
 export function StatusBadge({ status }: { status?: string }) {
   const t = useTranslations('enums.status');
   const map: Record<string, Tone> = {
@@ -57,8 +57,7 @@ export function StatusBadge({ status }: { status?: string }) {
   };
   if (!status) return null;
   const tone = map[status] ?? 'gray';
-  // A backend enum with no translation key falls back to the previous rendering
-  // rather than printing the key at a user - new statuses ship before copy does.
+  
   const label = t.has(status) ? t(status) : status.replace(/_/g, ' ');
   return (
     <Badge tone={tone} dot={status === 'CRITICAL'}>

@@ -39,7 +39,6 @@ export default function DoctorProfilePage() {
     );
   }
 
-  // Free-text on the doctor record, so an unmapped value prints as stored.
   const specialization =
     doctor.specialization && ts.has(doctor.specialization)
       ? ts(doctor.specialization)
@@ -120,8 +119,7 @@ export default function DoctorProfilePage() {
               {t('howToTitle', { name: doctor.fullName })}
             </h3>
             <ol className="mt-3 space-y-2 text-sm text-blue-800">
-              {/* The step numbers are part of the copy, so they are already in
-                  the right numerals in each language. */}
+              
               <li>{t('how1')}</li>
               <li>{t('how2')}</li>
               <li>{t('how3')}</li>

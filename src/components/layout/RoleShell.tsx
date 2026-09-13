@@ -5,10 +5,7 @@ import Navbar from './Navbar';
 import Sidebar, { type NavItem } from './Sidebar';
 import BottomNav from './BottomNav';
 
-/**
- * The shared frame every logged-in role layout renders:
- * navbar on top, sidebar on the left (desktop), bottom nav on mobile.
- */
+
 export default function RoleShell({
   items,
   children,
